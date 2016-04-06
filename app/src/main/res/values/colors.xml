@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012 Guillaume EHRET
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+
+    <color name="color_home">#37474F</color>
+    <color name="color_planning">#E91E63</color>
+
+    <color name="color_speaker">#0097a7</color>
+    <color name="color_staff">#00796b</color>
+    <color name="color_sponsor">#c2185b</color>
+    <color name="color_members">#5d4037</color>
+
+    <color name="color_talks">#455a64</color>
+    <color name="color_lightningtalks">#78909c</color>
+    <color name="color_workshops">#607d8b</color>
+    <color name="color_favorites">#0277bd</color>
+
+
+    <color name="color_menu">#444444</color>
+    <color name="color_planning_time">#80888888</color>
+    <color name="color_planning_oldsession">#cccccc</color>
+
+    <color name="transparent">#00000000</color>
+
+    <color name="focus">#FFF9C4</color>
+    <color name="selected">#FFF59D</color>
+
+    <color name="blue">#00ADEE</color>
+
+    <color name="grey_dark">#888888</color>
+    <color name="grey">#AAAAAA</color>
+    <color name="grey_light">#CCCCCC</color>
+    <color name="yellow3">#FBE983</color>
+    <color name="red1">#FF7537</color>
+    <color name="black">#000000</color>
+    <color name="orange">#FFA132</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="salle1">#F691B2</color>
+    <color name="salle2">#FBE983</color>
+    <color name="salle3">#B3DC6C</color>
+    <color name="salle4">#FAD165</color>
+    <color name="salle5">#9A9CFF</color>
+    <color name="salle6">#D8436D</color>
+    <color name="salle7">#E1F40E</color>
+    <color name="salle8">#3D9E94</color>
+    <color name="salle9">#E8A814</color>
+
+</resources>
