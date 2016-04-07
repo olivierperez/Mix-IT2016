@@ -106,6 +106,17 @@ public class SessionDetailFragment extends Fragment {
         this.sessionPersonList = (LinearLayout) rootView.findViewById(R.id.sessionPersonList);
         this.langImage = (ImageView) rootView.findViewById(R.id.talk_image_language);
 
+        this.imageFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(toggleFavorite()==Toggle.TRUE){
+                    imageFavorite.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_important));
+                }
+                else{
+                    imageFavorite.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_not_important));
+                }
+            }
+        });
         return rootView;
     }
 
@@ -151,7 +162,7 @@ public class SessionDetailFragment extends Fragment {
         addInterestInfo(conference);
     }
 
-    private void addGeneralInfo(Talk conference){
+    private void addGeneralInfo(Talk conference) {
         SimpleDateFormat sdf = new SimpleDateFormat("EEE");
         if (conference.getStart() != null && conference.getEnd() != null) {
             horaire.setText(String.format(getResources().getString(R.string.periode),
@@ -163,7 +174,7 @@ public class SessionDetailFragment extends Fragment {
             horaire.setText(getResources().getString(R.string.pasdate));
 
         }
-        level.setText("votes : "+ conference.getPositiveVotes());
+        level.setText("votes : " + conference.getPositiveVotes());
         name.setText(conference.getTitle());
         summary.setText(Html.fromHtml(Processor.process(conference.getSummary()).trim()));
 
@@ -175,18 +186,16 @@ public class SessionDetailFragment extends Fragment {
         final Salle room = Salle.getSalle(conference.getRoom());
 
 
-        if(conference.getLang()!=null && "en".equals(conference.getLang())){
+        if (conference.getLang() != null && "en".equals(conference.getLang())) {
             langImage.setImageDrawable(getResources().getDrawable(R.drawable.en));
-        }
-        else{
+        } else {
             langImage.setImageDrawable(getResources().getDrawable(R.drawable.fr));
         }
         if (Salle.INCONNU != room) {
             salle.setText(String.format(getString(R.string.Salle), room.getNom()));
-            if(room.getDrawable()!=0){
+            if (room.getDrawable() != 0) {
                 salle.setBackgroundResource(room.getDrawable());
-            }
-            else{
+            } else {
                 salle.setBackgroundColor(getActivity().getBaseContext().getResources().getColor(room.getColor()));
             }
             salle.setOnClickListener(new View.OnClickListener() {
@@ -200,14 +209,14 @@ public class SessionDetailFragment extends Fragment {
         }
     }
 
-    private void addSpeakerInfo(Talk conference){
+    private void addSpeakerInfo(Talk conference) {
         //On vide les éléments
         sessionPersonList.removeAllViews();
 
         List<Member> speakers = new ArrayList<>();
         for (Speaker member : conference.getSpeakers()) {
             Member membre = MembreFacade.getInstance().getMembre(getActivity(), TypeFile.speaker.name(), member.getIdMember());
-            if(membre==null){
+            if (membre == null) {
                 membre = MembreFacade.getInstance().getMembre(getActivity(), TypeFile.speakerlt.name(), member.getIdMember());
             }
             if (membre != null) {
@@ -225,7 +234,7 @@ public class SessionDetailFragment extends Fragment {
             TableLayout tableLayout = new TableLayout(getActivity().getBaseContext());
             tableLayout.setLayoutParams(tableParams);
 
-            if(mInflater!=null) {
+            if (mInflater != null) {
                 for (final Member membre : speakers) {
                     LinearLayout row = (LinearLayout) mInflater.inflate(R.layout.item_person, tableLayout, false);
                     row.setBackgroundResource(R.drawable.row_transparent_background);
@@ -271,7 +280,7 @@ public class SessionDetailFragment extends Fragment {
     }
 
 
-    private void addInterestInfo(Talk conference){
+    private void addInterestInfo(Talk conference) {
         //On vide les éléments
         sessionLinkList.removeAllViews();
         //On affiche les liens que si on a recuperer des choses
@@ -300,20 +309,13 @@ public class SessionDetailFragment extends Fragment {
     /**
      * Icon change according to the session if it's present or not in the favorites
      */
-    public void updateMenuItem(MenuItem item, Boolean isFavorite) {
-        if(isFavorite==null){
+    public void updateMenuItem(Boolean isFavorite) {
+        if (isFavorite == null) {
             isFavorite = isTalkFavorite();
         }
         if (isFavorite) {
-            //On affiche bouton pour l'enlever
-            item.setTitle(R.string.description_favorite_del);
-            item.setIcon(getResources().getDrawable(R.drawable.ic_action_del_event));
             imageFavorite.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_important));
-        }
-        else {
-            //On affiche bouton pour l'ajouter
-            item.setTitle(R.string.description_favorite_add);
-            item.setIcon(getResources().getDrawable(R.drawable.ic_action_add_event));
+        } else {
             imageFavorite.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_not_important));
         }
     }
@@ -329,33 +331,31 @@ public class SessionDetailFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        MenuItem item = menu.findItem(R.id.menu_favorites).setVisible(true);
-        updateMenuItem(item, null);
+        updateMenuItem(null);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    private enum Toggle {TRUE, FALSE, NOTHING}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_favorites) {
-            //On recupere id
-            long id = getArguments().getLong(UIUtils.ARG_ID);
-            if (id > 0) {
-                //On sauvegarde le choix de l'utilsateur
-                SharedPreferences settings = getActivity().getSharedPreferences(UIUtils.PREFS_FAVORITES_NAME, 0);
-                SharedPreferences.Editor editor = settings.edit();
-                if (isTalkFavorite()) {
-                    //S'il l'est et on qu'on a cliquer sur le bouton on supprime
-                    editor.remove(String.valueOf(id));
-                    updateMenuItem(item, false);
+    protected Toggle toggleFavorite() {
+        //On recupere id
+        long id = getArguments().getLong(UIUtils.ARG_ID);
+        Toggle toggle = Toggle.NOTHING;
+        if (id > 0) {
+            //On sauvegarde le choix de l'utilsateur
+            SharedPreferences settings = getActivity().getSharedPreferences(UIUtils.PREFS_FAVORITES_NAME, 0);
+            SharedPreferences.Editor editor = settings.edit();
+            if (isTalkFavorite()) {
+                //S'il l'est et on qu'on a cliquer sur le bouton on supprime
+                editor.remove(String.valueOf(id));
+                toggle = Toggle.FALSE;
 
-                } else {
-                    editor.putBoolean(String.valueOf(id), Boolean.TRUE);
-                    updateMenuItem(item, true);
-                }
-                editor.apply();
+            } else {
+                editor.putBoolean(String.valueOf(id), Boolean.TRUE);
+                toggle = Toggle.TRUE;
             }
+            editor.apply();
         }
-        return super.onOptionsItemSelected(item);
+        return toggle;
     }
 }

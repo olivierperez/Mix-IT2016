@@ -7,10 +7,6 @@
         android:icon="@drawable/ic_action_search"
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.widget.SearchView"/>
-    <item android:id="@+id/menu_favorites"
-        android:icon="@drawable/ic_action_event"
-        android:title="@string/action_settings"
-        app:showAsAction="ifRoom|collapseActionView"/>
     <item android:id="@+id/menu_profile"
         android:icon="@drawable/ic_action_shuffle"
         android:title="@string/action_settings"

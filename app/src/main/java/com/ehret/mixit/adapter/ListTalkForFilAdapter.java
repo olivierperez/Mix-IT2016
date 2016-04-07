@@ -123,7 +123,7 @@ public class ListTalkForFilAdapter extends BaseAdapter {
                 holder.name.setTextColor(context.getResources().getColor(R.color.white));
             } else if (conf.getFormat() != null && "day2".equals(conf.getFormat())) {
                 convertView.setBackgroundColor(context.getResources().getColor(R.color.color_home));
-                holder.name.setText(context.getResources().getString(R.string.calendrier_jour1));
+                holder.name.setText(context.getResources().getString(R.string.calendrier_jour2));
                 holder.name.setTextColor(context.getResources().getColor(R.color.white));
             } else {
                 convertView.setBackgroundColor(context.getResources().getColor(R.color.color_planning_time));

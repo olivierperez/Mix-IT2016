@@ -239,7 +239,6 @@ public class HomeActivity extends ActionBarActivity
         if (!found) {
             menu.findItem(R.id.menu_search).setVisible(false);
         }
-        menu.findItem(R.id.menu_favorites).setVisible(false);
         menu.findItem(R.id.menu_profile).setVisible(false);
         return true;
     }

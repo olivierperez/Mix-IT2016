@@ -51,7 +51,8 @@
                     android:id="@+id/talk_image_favorite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:scaleType="fitCenter" />
+                    android:scaleType="fitCenter"
+                    />
             </FrameLayout>
 
             <TextView
