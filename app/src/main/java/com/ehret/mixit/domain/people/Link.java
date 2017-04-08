@@ -16,7 +16,7 @@
 package com.ehret.mixit.domain.people;
 
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * Lien partage par un speaker ou une personne
@@ -30,15 +30,17 @@ public class Link {
         return rel;
     }
 
-    public void setRel(String rel) {
+    public Link setRel(String rel) {
         this.rel = rel;
+        return this;
     }
 
     public String getHref() {
         return href;
     }
 
-    public void setHref(String href) {
+    public Link setHref(String href) {
         this.href = href;
+        return this;
     }
 }

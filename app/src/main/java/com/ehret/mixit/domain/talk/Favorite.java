@@ -15,7 +15,7 @@
  */
 package com.ehret.mixit.domain.talk;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * Classe mère des conferences contenant les données communes

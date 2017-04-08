@@ -3,6 +3,8 @@ package com.ehret.mixit.fragment;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -106,13 +108,13 @@ public class NavigationDrawerFragment extends Fragment {
                                 new com.ehret.mixit.domain.Menu().setId(1).setLabel(R.string.title_section_home).setColorResource(R.color.color_home),
                                 new com.ehret.mixit.domain.Menu().setId(2).setLabel(R.string.title_section_planning).setColorResource(R.color.color_planning),
                                 //new com.ehret.mixit.domain.Menu().setId(3).setLabel(R.string.title_section_fildeleau).setColorResource(R.color.color_planning),
-                                new com.ehret.mixit.domain.Menu().setId(4).setLabel(R.string.title_section_talk).setColorResource(R.color.color_talks),
-                                new com.ehret.mixit.domain.Menu().setId(5).setLabel(R.string.title_section_workshop).setColorResource(R.color.color_workshops),
-                                new com.ehret.mixit.domain.Menu().setId(6).setLabel(R.string.title_section_favoris).setColorResource(R.color.color_favorites),
-                                new com.ehret.mixit.domain.Menu().setId(8).setLabel(R.string.title_section_lightningtalks).setColorResource(R.color.color_lightningtalks),
-                                new com.ehret.mixit.domain.Menu().setId(9).setLabel(R.string.title_section_speaker).setColorResource(R.color.color_speaker),
-                                new com.ehret.mixit.domain.Menu().setId(10).setLabel(R.string.title_section_sponsor).setColorResource(R.color.color_sponsor),
-                                new com.ehret.mixit.domain.Menu().setId(11).setLabel(R.string.title_section_staff).setColorResource(R.color.color_staff)
+                                new com.ehret.mixit.domain.Menu().setId(4).setLabel(R.string.title_section_favoris).setColorResource(R.color.color_favorites),
+                                new com.ehret.mixit.domain.Menu().setId(5).setLabel(R.string.title_section_talk).setColorResource(R.color.color_talks),
+                                new com.ehret.mixit.domain.Menu().setId(6).setLabel(R.string.title_section_workshop).setColorResource(R.color.color_workshops),
+                                //new com.ehret.mixit.domain.Menu().setId(8).setLabel(R.string.title_section_lightningtalks).setColorResource(R.color.color_lightningtalks),
+                                new com.ehret.mixit.domain.Menu().setId(7).setLabel(R.string.title_section_speaker).setColorResource(R.color.color_speaker),
+                                new com.ehret.mixit.domain.Menu().setId(8).setLabel(R.string.title_section_sponsor).setColorResource(R.color.color_sponsor),
+                                new com.ehret.mixit.domain.Menu().setId(9).setLabel(R.string.title_section_staff).setColorResource(R.color.color_staff)
 
                         )
                 ));
@@ -259,6 +261,7 @@ public class NavigationDrawerFragment extends Fragment {
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setTitle(R.string.app_name);
+        actionBar.setBackgroundDrawable(new ColorDrawable(R.color.color_primary));
     }
 
     private ActionBar getActionBar() {

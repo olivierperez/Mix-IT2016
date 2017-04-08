@@ -1,5 +1,7 @@
 package com.ehret.mixit;
 
+import java.util.List;
+
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
@@ -22,7 +24,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
 import android.widget.Toast;
-
 import com.ehret.mixit.domain.JsonFile;
 import com.ehret.mixit.domain.SendSocial;
 import com.ehret.mixit.domain.TypeFile;
@@ -33,16 +34,12 @@ import com.ehret.mixit.fragment.FilDeLeauFragment;
 import com.ehret.mixit.fragment.HomeFragment;
 import com.ehret.mixit.fragment.NavigationDrawerFragment;
 import com.ehret.mixit.fragment.PeopleDetailFragment;
-import com.ehret.mixit.fragment.PlanningFragment;
 import com.ehret.mixit.fragment.SessionDetailFragment;
 import com.ehret.mixit.model.ConferenceFacade;
 import com.ehret.mixit.model.MembreFacade;
 import com.ehret.mixit.model.Synchronizer;
 import com.ehret.mixit.utils.FileUtils;
 import com.ehret.mixit.utils.UIUtils;
-
-import java.util.Arrays;
-import java.util.List;
 
 
 public class HomeActivity extends ActionBarActivity
@@ -68,7 +65,7 @@ public class HomeActivity extends ActionBarActivity
         if(test){
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean(UIUtils.ARG_KEY_FIRST_TIME, false);
-            appelerSynchronizer(TypeAppel.TALK, null);
+            appelerSynchronizer(TypeAppel.TALK);
             editor.apply();
         }
 
@@ -121,24 +118,28 @@ public class HomeActivity extends ActionBarActivity
             editor.apply();
         }
 
+        TypeFile typeFile = null;
         switch (position) {
             case 2:
-                return TypeFile.talks;
+                typeFile = TypeFile.favorites;
+                break;
             case 3:
-                return TypeFile.workshops;
+                typeFile = TypeFile.talks;
+                break;
             case 4:
-                return TypeFile.favorites;
+                typeFile = TypeFile.workshops;
+                break;
             case 5:
-                return TypeFile.lightningtalks;
+                typeFile = TypeFile.speaker;
+                break;
             case 6:
-                return TypeFile.speaker;
+                typeFile = TypeFile.sponsor;
+                break;
             case 7:
-                return TypeFile.sponsor;
-            case 8:
-                return TypeFile.staff;
-            default:
-                return TypeFile.members;
+                typeFile = TypeFile.staff;
+                break;
         }
+        return typeFile;
     }
 
     @Override
@@ -250,27 +251,15 @@ public class HomeActivity extends ActionBarActivity
                 DialogAboutFragment dial = new DialogAboutFragment();
                 dial.show(getFragmentManager(), getResources().getString(R.string.about_titre));
                 return true;
-            case R.id.menu_compose_google:
-                UIUtils.sendMessage(this, SendSocial.plus);
-                return true;
-            case R.id.menu_compose_twitter:
-                UIUtils.sendMessage(this, SendSocial.twitter);
-                return true;
-            case R.id.menu_sync_membre:
-                chargementDonnees(TypeAppel.MEMBRE);
-                return true;
+//            case R.id.menu_compose_google:
+//                UIUtils.sendMessage(this, SendSocial.plus);
+//                return true;
+//            case R.id.menu_compose_twitter:
+//                UIUtils.sendMessage(this, SendSocial.twitter);
+//                return true;
             case R.id.menu_sync_talk:
                 chargementDonnees(TypeAppel.TALK);
                 return true;
-//            case R.id.menu_sync_favorites:
-//                SharedPreferences settings = getSharedPreferences(UIUtils.PREFS_TEMP_NAME, 0);
-//                Long id = settings.getLong("idMemberForFavorite", 0L);
-//                if (id > 0) {
-//                    appelerSynchronizer(TypeAppel.FAVORITE, id);
-//                } else {
-//                    Toast.makeText(this, getString(R.string.description_link_user_error), Toast.LENGTH_LONG).show();
-//                }
-//                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -289,7 +278,7 @@ public class HomeActivity extends ActionBarActivity
                         getString(type == TypeAppel.MEMBRE ? R.string.dial_message_membre : R.string.dial_message_talk))
                         .setPositiveButton(R.string.dial_oui, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                appelerSynchronizer(type, null);
+                                appelerSynchronizer(type);
                             }
                         })
                         .setNeutralButton(R.string.dial_cancel, new DialogInterface.OnClickListener() {
@@ -310,37 +299,31 @@ public class HomeActivity extends ActionBarActivity
     /**
      * Lancement de la synchro
      */
-    public void appelerSynchronizer(TypeAppel type, Long idUserForFavorite) {
+    public void appelerSynchronizer(TypeAppel type) {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(this);
         }
         progressDialog.setCancelable(true);
         int nbMax;
         if (type.equals(TypeAppel.TALK)) {
-            nbMax = 100;
+            nbMax = 135;
         } else if (type.equals(TypeAppel.MEMBRE)) {
-            nbMax = 200;
+            nbMax = 135;
         } else {
-            nbMax = 3;
+            nbMax = 135;
         }
 
         progressDialog.setMax(nbMax);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setMessage(getResources().getString(R.string.sync_message));
         progressDialog.show();
-        SynchronizeMixitAsync synchronizeMixitAsync = new SynchronizeMixitAsync(idUserForFavorite);
-        synchronizeMixitAsync.execute(type);
+        new SynchronizeMixitAsync().execute(type);
     }
 
     /**
      * Lance en asynchrone la recuperation des fichiers
      */
     private class SynchronizeMixitAsync extends AsyncTask<TypeAppel, Integer, Void> {
-        private Long idUserForFavorite;
-
-        private SynchronizeMixitAsync(Long idUserForFavorite) {
-            this.idUserForFavorite = idUserForFavorite;
-        }
 
         @Override
         protected void onPreExecute() {
@@ -352,45 +335,21 @@ public class HomeActivity extends ActionBarActivity
         protected Void doInBackground(TypeAppel... params) {
             TypeAppel type = params[0];
 
-            if (type.equals(TypeAppel.FAVORITE)) {
-                if (Synchronizer.downloadJsonFile(getBaseContext(), String.format(JsonFile.FileFavorites.getUrl(), idUserForFavorite), JsonFile.FileFavorites.getType())) {
-                    //Si OK on met a jour les favoris en ecrasant ceux existant
-                    ConferenceFacade.getInstance().setFavorites(getBaseContext(), false);
-                }
-                publishProgress(progressStatus++);
-                return null;
-            }
-
-            List<JsonFile> jsonToSync = null;
-            //En fonction de la demande on télécharge tel ou tel fichier
-            switch (type) {
-                case TALK:
-                    jsonToSync = Arrays.asList(JsonFile.FileTalks, JsonFile.FileSpeaker, JsonFile.FileSpeakerLT, JsonFile.FileSponsor);
-                    break;
-                case MEMBRE:
-                    //jsonToSync = Arrays.asList(JsonFile.FileMembers, JsonFile.FileSpeaker, JsonFile.FileSponsor, JsonFile.FileStaff);
-                    jsonToSync = Arrays.asList(JsonFile.FileSpeaker, JsonFile.FileSpeakerLT, JsonFile.FileSponsor, JsonFile.FileStaff);
-                    break;
-            }
-
-            if(jsonToSync!=null) {
-                for (JsonFile json : jsonToSync) {
-                    try {
-                        if (!Synchronizer.downloadJsonFile(getBaseContext(), json.getUrl(), json.getType())) {
-                            //Si une erreur de chargement on sort
-                            break;
-                        }
-                        publishProgress(progressStatus++);
-                    } catch (RuntimeException e) {
-                        Log.w("DialogSynchronize", "Impossible de synchroniser", e);
+            // For this version we don't used anymore the favorites
+            for (JsonFile json : JsonFile.values()) {
+                try {
+                    if (json.isReadRemote() && !Synchronizer.downloadJsonFile(getBaseContext(), json.getUrl(), json.getType())) {
+                        //Si une erreur de chargement on sort
+                        break;
                     }
+                    publishProgress(progressStatus++);
+                } catch (RuntimeException e) {
+                    Log.w("DialogSynchronize", "Impossible de synchroniser", e);
                 }
             }
 
-            if (type.equals(TypeAppel.FAVORITE)) {
-                return null;
-            }
 
+            //TODO certainement à revoir
             //Une fois finie on supprime le cache
             List<Member> membres;
             if (type.equals(TypeAppel.TALK)) {
@@ -398,22 +357,30 @@ public class HomeActivity extends ActionBarActivity
                 ConferenceFacade.getInstance().viderCache();
                 membres = MembreFacade.getInstance().getMembres(getBaseContext(), TypeFile.speaker.name(), null);
                 membres.addAll(MembreFacade.getInstance().getMembres(getBaseContext(), TypeFile.staff.name(), null));
-            } else {
+            }
+            else {
                 MembreFacade.getInstance().viderCacheMembres();
                 membres = MembreFacade.getInstance().getMembres(getBaseContext(), TypeFile.members.name(), null);
             }
 
             //L'action d'après consiste à charger les images
             for (Member membre : membres) {
+                if (membre.getUrlImage() != null && membre.isSpeaker()) {
+                    Synchronizer.downloadImage(getBaseContext(), membre.getUrlImage(), "membre" + membre.getLogin());
+                    publishProgress(progressStatus++);
+                }
+            }
+            //L'action d'après consiste à charger les images
+            for (Member membre : MembreFacade.getInstance().getMembres(getBaseContext(), TypeFile.staff.name(), null)) {
                 if (membre.getUrlImage() != null) {
-                    Synchronizer.downloadImage(getBaseContext(), membre.getUrlImage(), "membre" + membre.getIdMember());
+                    Synchronizer.downloadImage(getBaseContext(), membre.getUrlImage(), "membre" + membre.getLogin());
                     publishProgress(progressStatus++);
                 }
             }
             //Pour les sponsors on s'interesse au logo
             for (Member membre : MembreFacade.getInstance().getMembres(getBaseContext(), TypeFile.sponsor.name(), null)) {
-                if (membre.getLogo() != null) {
-                    Synchronizer.downloadImage(getBaseContext(), membre.getUrlImage(), "membre" + membre.getIdMember());
+                if (membre.getLogo() != null && membre.isSponsor()) {
+                    Synchronizer.downloadImage(getBaseContext(), membre.getUrlImage(), "membre" + membre.getLogin());
                     publishProgress(progressStatus++);
                 }
             }

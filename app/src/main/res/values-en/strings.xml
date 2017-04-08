@@ -19,8 +19,8 @@
     <string name="calendrier_confs">Talks</string>
     <string name="calendrier_detail">See more</string>
     <string name="calendrier_explication">Click on a slot to see talks and workshops by room</string>
-    <string name="calendrier_jour1">Thursday 21 april</string>
-    <string name="calendrier_jour2">Friday 22 april</string>
+    <string name="calendrier_jour1">Thursday 20 april</string>
+    <string name="calendrier_jour2">Friday 21 april</string>
     <string name="calendrier_legende">(T) talk, (W) workshop, (K) keynote, (L) lightning talk</string>
     <string name="calendrier_orgalg">Speakers introduce their sessions</string>
     <string name="calendrier_pause">Break</string>
@@ -49,11 +49,11 @@
     <string name="description_sync_favorites">Refresh yours favorites from website</string>
     <string name="description_sync_membre">Refresh members from website</string>
     <string name="description_sync_speaker">Refresh speakers from website</string>
-    <string name="description_sync_talk">Refresh talks from website</string>
+    <string name="description_sync_talk">Refresh data from website</string>
     <string name="description_talk">Talks</string>
     <string name="description_venir">How to come</string>
     <string name="description_howtocome">Click on a map below, to navigate to the conference or to the party</string>
-    <string name="description_venir_mixit">How to come at Mix-IT</string>
+    <string name="description_venir_mixit">How to come at MiXiT</string>
     <string name="description_votant">Nb voters</string>
     <string name="description_workshop">Workshops</string>
     <string name="dial_cancel">Cancel</string>
@@ -73,7 +73,7 @@
     <string name="onload">Ongoing downloading</string>
     <string name="pasdate">Hour not defined</string>
     <string name="search_hint">text</string>
-    <string name="sync_erreur">Mix-IT website is not accessible for the moment... Retry later</string>
+    <string name="sync_erreur">MiXiT website is not accessible for the moment... Retry later</string>
     <string name="sync_erreur_reseau">Network is not accessible for the moment... Retry later</string>
     <string name="sync_message">Downloading start...</string>
     <string name="title_detail_favorites">Favorite</string>
@@ -90,8 +90,9 @@
     <string name="whats_on_thank_you_title">See you next year</string>
     <string name="whats_on_countdown_title_0"> </string>
     <plurals name="whats_on_countdown_title">
-        <item quantity="one"><xliff:g id="number_of_days">%1$s</xliff:g> day, <xliff:g id="remaining_time">%2$s</xliff:g>\nbefore Mix-IT 2016</item>
-        <item quantity="other"><xliff:g id="number_of_days">%1$s</xliff:g> days, <xliff:g id="remaining_time">%2$s</xliff:g>\nbefore Mix-IT 2016</item>
+        <item quantity="one"><xliff:g id="number_of_days">%1$s</xliff:g> day, <xliff:g id="remaining_time">%2$s</xliff:g>\nbefore MiXiT 2017</item>
+        <item quantity="other"><xliff:g id="number_of_days">%1$s</xliff:g> days, <xliff:g id="remaining_time">%2$s</xliff:g>\nbefore MiXiT 2017</item>
     </plurals>
-    <string name="welcome">Welcome on the Mix-IT application which help you to follow the different speakers, sponsors.. and know all on the programmation of this conference</string>
+    <string name="welcome">La conférence Lyonnaise
+        avec des crêpes et du cœur</string>
 </resources>

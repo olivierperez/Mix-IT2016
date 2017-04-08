@@ -35,7 +35,7 @@ public class FilDeLeauFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        ((HomeActivity) activity).onSectionAttached("title_fildeleau","color_planning");
+        ((HomeActivity) activity).onSectionAttached("title_fildeleau","color_primary");
     }
 
     /**
@@ -52,11 +52,11 @@ public class FilDeLeauFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Talk conf = (Talk) liste.getItemAtPosition(position);
 
-                if("Workshop".equals(conf.getFormat())){
+                if("WORKSHOP".equals(conf.getFormat())){
                     ((HomeActivity) getActivity()).changeCurrentFragment(
                             SessionDetailFragment.newInstance(TypeFile.workshops.toString(), conf.getIdSession(),4), TypeFile.workshops.toString());
                 }
-                else if("Talk".equals(conf.getFormat()) || "Keynote".equals(conf.getFormat())){
+                else {
                     ((HomeActivity) getActivity()).changeCurrentFragment(
                             SessionDetailFragment.newInstance(TypeFile.talks.toString(), conf.getIdSession(),3), TypeFile.talks.toString());
                 }

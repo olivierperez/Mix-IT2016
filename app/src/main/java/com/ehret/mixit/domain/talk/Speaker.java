@@ -1,11 +1,11 @@
 package com.ehret.mixit.domain.talk;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Speaker  {
 
-    private Long idMember;
+    private String idMember;
 
     private String firstname;
 
@@ -13,11 +13,11 @@ public class Speaker  {
 
     private String hash;
 
-    public Long getIdMember() {
+    public String getIdMember() {
         return idMember;
     }
 
-    public Speaker setIdMember(Long idMember) {
+    public Speaker setIdMember(String idMember) {
         this.idMember = idMember;
         return this;
     }

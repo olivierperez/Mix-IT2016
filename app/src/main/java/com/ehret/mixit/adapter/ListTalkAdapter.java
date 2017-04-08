@@ -75,6 +75,7 @@ public class ListTalkAdapter extends BaseAdapter {
             holder.descriptif = (TextView) convertView.findViewById(R.id.talk_shortdesciptif);
             holder.horaire = (TextView) convertView.findViewById(R.id.talk_horaire);
             holder.talkImageText = (TextView) convertView.findViewById(R.id.talkImageText);
+            holder.imageTrack = (ImageView) convertView.findViewById(R.id.talk_image_track);
             holder.talkSalle = (TextView) convertView.findViewById(R.id.talk_salle);
             convertView.setTag(holder);
         } else {
@@ -97,7 +98,7 @@ public class ListTalkAdapter extends BaseAdapter {
             holder.horaire.setText(context.getResources().getString(R.string.pasdate));
 
         }
-        if(conf.getLang()!=null && "en".equals(conf.getLang())){
+        if(conf.getLang()!=null && "ENGLISH".equals(conf.getLang())){
             holder.langImage.setImageDrawable(context.getResources().getDrawable(R.drawable.en));
         }
         else{
@@ -119,22 +120,41 @@ public class ListTalkAdapter extends BaseAdapter {
             holder.talkSalle.setText("");
         }
 
-        if ("Workshop".equals(conf.getFormat())) {
-                holder.talkImageText.setText("Atelier");
+        if ("WORKSHOP".equals(conf.getFormat())) {
+                holder.talkImageText.setText("Workshop");
         }
-        else if ("Keynote".equals(((Talk) conf).getFormat())) {
+        else if ("KEYNOTE".equals(((Talk) conf).getFormat())) {
             holder.talkImageText.setText("Keynote");
         }
-        else if ("Random".equals(((Talk) conf).getFormat())) {
+        else if ("RANDOM".equals(((Talk) conf).getFormat())) {
             holder.talkImageText.setText("Random");
         }
-        else if ("Talk".equals(((Talk) conf).getFormat())) {
+        else if ("TALK".equals(((Talk) conf).getFormat())) {
             holder.talkImageText.setText("Talk");
         }
-        else {
-            holder.talkImageText.setText("L.Talk");
-        }
 
+        if(conf.getTrack()!=null){
+            switch (conf.getTrack()){
+                case "aliens":
+                    holder.imageTrack.setImageDrawable(context.getResources().getDrawable(R.drawable.mxt_icon__aliens));
+                    break;
+                case "design":
+                    holder.imageTrack.setImageDrawable(context.getResources().getDrawable(R.drawable.mxt_icon__design));
+                    break;
+                case "hacktivism":
+                    holder.imageTrack.setImageDrawable(context.getResources().getDrawable(R.drawable.mxt_icon__hack));
+                    break;
+                case "tech":
+                    holder.imageTrack.setImageDrawable(context.getResources().getDrawable(R.drawable.mxt_icon__tech));
+                    break;
+                case "learn":
+                    holder.imageTrack.setImageDrawable(context.getResources().getDrawable(R.drawable.mxt_icon__learn));
+                    break;
+                case "makers":
+                    holder.imageTrack.setImageDrawable(context.getResources().getDrawable(R.drawable.mxt_icon__makers));
+                    break;
+            }
+        }
         //On regarde si la conf fait partie des favoris
         SharedPreferences settings = context.getSharedPreferences(UIUtils.PREFS_FAVORITES_NAME, 0);
         boolean trouve = false;
@@ -158,6 +178,7 @@ public class ListTalkAdapter extends BaseAdapter {
         TextView talkImageText;
         TextView talkSalle;
         ImageView imageFavorite;
+        ImageView imageTrack;
         ImageView langImage;
     }
 

@@ -40,12 +40,13 @@ import java.util.TimeZone;
 public class UIUtils {
 
     private static final Time sTime = new Time();
-    public static final long CONFERENCE_START_MILLIS = parseTime("2016-04-21T08:15:00.000-07:00");
-    public static final long CONFERENCE_END_MILLIS = parseTime("2016-04-22T18:15:00.000-07:00");
+    public static final long CONFERENCE_START_MILLIS = parseTime("2017-04-21T08:15:00.000-07:00");
+    public static final long CONFERENCE_END_MILLIS = parseTime("2017-04-22T18:15:00.000-07:00");
 
     public static final String ARG_LIST_TYPE = "type_liste";
     public static final String ARG_LIST_FILTER = "type_filter";
     public static final String ARG_SECTION_NUMBER = "section_number";
+    public static final String ARG_LOGIN = "login";
     public static final String ARG_ID = "id";
     public static final String PREFS_FAVORITES_NAME = "PrefFavorites";
     public static final String PREFS_TEMP_NAME = "PrefTemp";
@@ -143,7 +144,7 @@ public class UIUtils {
      */
     public static Date createPlageHoraire(int jour, int heure, int minute) {
         Calendar calendar = Calendar.getInstance(Locale.FRANCE);
-        calendar.set(2016, 3, jour, heure, minute , 0);
+        calendar.set(2017, 3, jour, heure, minute , 0);
         return calendar.getTime();
     }
 

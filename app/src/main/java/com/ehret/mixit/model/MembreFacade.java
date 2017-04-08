@@ -15,29 +15,33 @@
  */
 package com.ehret.mixit.model;
 
-import android.content.Context;
-import android.util.Log;
-import android.util.LongSparseArray;
-
-import com.ehret.mixit.domain.TypeFile;
-import com.ehret.mixit.domain.people.Member;
-import com.ehret.mixit.utils.FileUtils;
-import com.ehret.mixit.utils.Utils;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Ordering;
-
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import android.content.Context;
+import android.util.Log;
+import com.ehret.mixit.domain.TypeFile;
+import com.ehret.mixit.domain.dto.EventDto;
+import com.ehret.mixit.domain.dto.SponsorDto;
+import com.ehret.mixit.domain.dto.UserDto;
+import com.ehret.mixit.domain.people.Level;
+import com.ehret.mixit.domain.people.Member;
+import com.ehret.mixit.utils.FileUtils;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Ordering;
 
 /**
  * Le but de ce fichier est de s'interfacer avec le fichier Json gerant les
@@ -59,23 +63,17 @@ public class MembreFacade {
 
     private final static String TAG = "MembreFacade";
 
-    private static LongSparseArray<Member> membres = new LongSparseArray<>();
+    private static Map<String, Member> membres = new HashMap<>();
 
-    private static LongSparseArray<Member> speaker = new LongSparseArray<>();
+    private static Map<String, Member> staff = new HashMap<>();
 
-    private static LongSparseArray<Member> speakerlt = new LongSparseArray<>();
-
-    private static LongSparseArray<Member> staff = new LongSparseArray<>();
-
-    private static LongSparseArray<Member> sponsors = new LongSparseArray<>();
+    private static Map<String, Member> sponsors = new HashMap<>();
 
     /**
      * Permet de vider le cache de données
      */
     public void viderCache() {
         membres.clear();
-        speaker.clear();
-        speakerlt.clear();
         staff.clear();
         sponsors.clear();
     }
@@ -84,8 +82,6 @@ public class MembreFacade {
      * Permet de vider le cache de données
      */
     public void viderCacheSpeakerStaffSponsor() {
-        speaker.clear();
-        speakerlt.clear();
         staff.clear();
         sponsors.clear();
     }
@@ -104,6 +100,7 @@ public class MembreFacade {
         //Creation de nos objets
         this.jsonFactory = new JsonFactory();
         this.objectMapper = new ObjectMapper();
+        this.objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
     }
 
     /**
@@ -117,33 +114,40 @@ public class MembreFacade {
     }
 
     public List<Member> getMembres(Context context, String typeAppel, String filtre) {
-        if (TypeFile.members.name().equals(typeAppel)) {
-            getMapMembres(context, typeAppel, membres);
-            return Ordering.from(getComparatorByName()).sortedCopy(filtrerMembre(membres, filtre));
-        } else if (TypeFile.staff.name().equals(typeAppel)) {
-            getMapMembres(context, typeAppel, staff);
-            return Ordering.from(getComparatorByName()).sortedCopy(filtrerMembre(staff, filtre));
-        } else if (TypeFile.sponsor.name().equals(typeAppel)) {
-            getMapMembres(context, typeAppel, sponsors);
-            return Ordering.from(getComparatorByDate()).compound(getComparatorByLevel()).sortedCopy(filtrerMembre(sponsors, filtre));
-        } else if (TypeFile.speaker.name().equals(typeAppel)) {
-            getMapMembres(context, typeAppel, speaker);
-            return Ordering.from(getComparatorByName()).sortedCopy(filtrerMembre(speaker, filtre));
-        } else if (TypeFile.speakerlt.name().equals(typeAppel)) {
-            getMapMembres(context, typeAppel, speakerlt);
-            return Ordering.from(getComparatorByName()).sortedCopy(filtrerMembre(speakerlt, filtre));
+        switch (TypeFile.getTypeFile(typeAppel)) {
+            case speaker:
+                getMapMembres(context, TypeFile.members, membres);
+                //Hack to load talk
+                ConferenceFacade.getInstance().getTalks(context, null);
+                List<Member> speakers = FluentIterable
+                        .from(filtrerMembre(membres, filtre))
+                        .filter(new Predicate<Member>() {
+                            @Override
+                            public boolean apply(Member input) {
+                                return input.isSpeaker();
+                            }
+                        }).toList();
+                return Ordering.from(getComparatorByName()).sortedCopy(speakers);
+            case members:
+                getMapMembres(context, TypeFile.members, membres);
+                return Ordering.from(getComparatorByName()).sortedCopy(filtrerMembre(membres, filtre));
+            case staff:
+                getMapMembres(context, TypeFile.staff, staff);
+                return Ordering.from(getComparatorByName()).sortedCopy(filtrerMembre(staff, filtre));
+            default:
+                getMapMembres(context, TypeFile.sponsor, sponsors);
+                return Ordering.from(getComparatorByDate()).compound(getComparatorByLevel()).sortedCopy(filtrerMembre(sponsors, filtre));
         }
-        return null;
     }
 
     /**
      * Filtre la liste des membres
      */
-    private List<Member> filtrerMembre(LongSparseArray<Member> talks, final String filtre) {
-        return FluentIterable.from(Utils.asList(talks)).filter(new Predicate<Member>() {
+    private List<Member> filtrerMembre(Map<String, Member> talks, final String filtre) {
+        return FluentIterable.from(talks.values()).filter(new Predicate<Member>() {
             @Override
             public boolean apply(Member input) {
-                if("MIX-IT".equals(input.getLastname()) || "Free slot".equals(input.getCompany())){
+                if ("MIX-IT".equals(input.getLastname()) || "Free slot".equals(input.getCompany())) {
                     return false;
                 }
                 return (filtre == null ||
@@ -161,10 +165,10 @@ public class MembreFacade {
         return new Comparator<Member>() {
             @Override
             public int compare(Member m1, Member m2) {
-                if (m1.getLevel() == null || m1.getLevel().isEmpty() || m1.getLevel().get(0).getKey()== null) {
+                if (m1.getLevel() == null || m1.getLevel().isEmpty() || m1.getLevel().get(0).getKey() == null) {
                     return 1;
                 }
-                if (m2.getLevel() == null || m2.getLevel().isEmpty() || m2.getLevel().get(0).getKey()== null) {
+                if (m2.getLevel() == null || m2.getLevel().isEmpty() || m2.getLevel().get(0).getKey() == null) {
                     return -1;
                 }
                 return m1.getLevel().get(0).getKey().compareTo(m2.getLevel().get(0).getKey());
@@ -179,10 +183,10 @@ public class MembreFacade {
         return new Comparator<Member>() {
             @Override
             public int compare(Member m1, Member m2) {
-                if (m1.getLevel() == null || m1.getLevel().isEmpty() || m1.getLevel().get(0).getValue()== null) {
+                if (m1.getLevel() == null || m1.getLevel().isEmpty() || m1.getLevel().get(0).getValue() == null) {
                     return 1;
                 }
-                if (m2.getLevel() == null || m2.getLevel().isEmpty() || m2.getLevel().get(0).getValue()== null) {
+                if (m2.getLevel() == null || m2.getLevel().isEmpty() || m2.getLevel().get(0).getValue() == null) {
                     return -1;
                 }
                 return m1.getLevel().get(0).getValue().compareTo(m2.getLevel().get(0).getValue());
@@ -211,60 +215,82 @@ public class MembreFacade {
     /**
      * Permet de recuperer la liste des membres
      */
-    private void getMapMembres(Context context, String type, LongSparseArray<Member> membres) {
-        if (membres.size()==0) {
+    private void getMapMembres(Context context, TypeFile type, Map<String, Member> membres) {
+        if (membres.size() == 0) {
             InputStream is = null;
-            List<Member> membreListe = null;
             JsonParser jp;
             try {
                 //On regarde si fichier telecharge
-                File myFile = FileUtils.getFileJson(context, TypeFile.getTypeFile(type));
+                File myFile = FileUtils.getFileJson(context, type);
                 if (myFile == null) {
                     //On prend celui inclut dans l'archive
-                    is = FileUtils.getRawFileJson(context, TypeFile.getTypeFile(type));
-                } else {
+                    is = FileUtils.getRawFileJson(context, type);
+                }
+                else {
                     is = new FileInputStream(myFile);
                 }
                 jp = this.jsonFactory.createJsonParser(is);
-                membreListe = this.objectMapper.readValue(jp, new TypeReference<List<Member>>() {
-                });
-            } catch (IOException e) {
-                Log.e(TAG, "Erreur lors de la recuperation des " + type, e);
-            } finally {
-                if (is != null) {
-                    try {
-                        is.close();
-                    } catch (IOException e) {
-                        Log.e(TAG, "Impossible de fermer le fichier " + type, e);
+
+                if (type == TypeFile.sponsor) {
+                    EventDto eventDto = this.objectMapper.readValue(jp, EventDto.class);
+                    if (eventDto.getSponsors() != null) {
+                        List<Member> members = MembreFacade.getInstance().getMembres(context, "members", null);
+                        for (final SponsorDto sponsor : eventDto.getSponsors()) {
+                            Member sp = FluentIterable.from(members).firstMatch(new Predicate<Member>() {
+                                @Override
+                                public boolean apply(Member input) {
+                                    return input.getLogin().equals(sponsor.getSponsorId());
+                                }
+                            }).get();
+                            sp.setSponsor(true);
+                            sp.setLogo(sp.getHash());
+                            sp.setLevel(Arrays.asList(new Level().setKey(sponsor.getLevel()).setValue(sponsor.getLevel())));
+                            sponsors.put(sponsor.getSponsorId(), sp);
+                        }
+                    }
+
+                }
+                else {
+                    List<UserDto> users = this.objectMapper.readValue(jp, new TypeReference<List<UserDto>>() {
+                    });
+                    //On transforme la liste en Map
+                    if (users != null) {
+                        for (UserDto m : users) {
+                            membres.put(m.getLogin(), m.toMember());
+                        }
                     }
                 }
             }
-            //On transforme la liste en Map
-            if (membreListe != null) {
-                for (Member m : membreListe) {
-                    membres.put(m.getIdMember(), m);
+            catch (IOException e) {
+                Log.e(TAG, "Erreur lors de la recuperation des " + type, e);
+            }
+            finally {
+                if (is != null) {
+                    try {
+                        is.close();
+                    }
+                    catch (IOException e) {
+                        Log.e(TAG, "Impossible de fermer le fichier " + type, e);
+                    }
                 }
             }
         }
     }
 
-    public Member getMembre(Context context, String typeAppel, Long key) {
-        if (TypeFile.members.name().equals(typeAppel)) {
-            getMapMembres(context, typeAppel, membres);
-            return membres.get(key);
-        } else if (TypeFile.staff.name().equals(typeAppel)) {
-            getMapMembres(context, typeAppel, staff);
-            return staff.get(key);
-        } else if (TypeFile.sponsor.name().equals(typeAppel)) {
-            getMapMembres(context, typeAppel, sponsors);
-            return sponsors.get(key);
-        } else if (TypeFile.speaker.name().equals(typeAppel)) {
-            getMapMembres(context, typeAppel, speaker);
-            return speaker.get(key);
-        } else if (TypeFile.speakerlt.name().equals(typeAppel)) {
-            getMapMembres(context, typeAppel, speakerlt);
-            return speakerlt.get(key);
+    public Member getMembre(Context context, String typeAppel, String key) {
+        switch (TypeFile.getTypeFile(typeAppel)) {
+            case speaker:
+                getMapMembres(context, TypeFile.members, membres);
+                return membres.get(key);
+            case members:
+                getMapMembres(context, TypeFile.members, membres);
+                return membres.get(key);
+            case staff:
+                getMapMembres(context, TypeFile.staff, staff);
+                return staff.get(key);
+            default:
+                getMapMembres(context, TypeFile.sponsor, sponsors);
+                return sponsors.get(key);
         }
-        return null;
     }
 }

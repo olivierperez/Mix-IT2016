@@ -130,25 +130,6 @@
             android:scrollbars="vertical"></LinearLayout>
 
 
-        <TextView
-            style="@style/myCalendarTitleh2"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="2dp"
-            android:paddingTop="8dp"
-            android:text="@string/description_interet"
-            android:id="@+id/titleInterets"
-            android:textStyle="bold" />
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/personInteretFragment"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:baselineAligned="false"
-            android:orientation="vertical"
-            android:padding="5dp"
-            android:scrollbars="vertical"></LinearLayout>
-
 
         <ImageView
             android:id="@+id/membre_logo"
@@ -156,7 +137,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_below="@id/personInteretFragment"
+            android:layout_below="@id/personLinkFragment"
             android:layout_marginRight="@dimen/speaker_image_padding"
             android:paddingBottom="4dp"
             android:paddingLeft="4dp"

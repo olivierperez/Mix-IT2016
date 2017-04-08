@@ -129,6 +129,36 @@
 
         </RelativeLayout>
 
+        <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp">
+
+            <ImageView
+                    android:id="@+id/talk_image_track"
+                    android:layout_width="@dimen/track_image_size"
+                    android:layout_height="@dimen/track_image_size"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_gravity="center_vertical"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="4dp"
+                    android:paddingTop="4dp"
+                    android:scaleType="fitCenter" />
+
+            <TextView
+                    style="@style/myTextView"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/talk_track"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="2dp"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="4dp"
+                    android:text="@string/description_speakers"
+                    android:layout_toRightOf="@id/talk_image_track"
+                    android:textStyle="bold" />
+        </RelativeLayout>
         <TextView
             style="@style/myCalendarTitleh2"
             android:layout_width="fill_parent"
@@ -147,24 +177,6 @@
             android:padding="5dp"
             android:scrollbars="vertical"></LinearLayout>
 
-        <TextView
-            style="@style/myCalendarTitleh2"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="2dp"
-            android:paddingTop="8dp"
-            android:text="@string/description_interet"
-            android:textStyle="bold" />
-
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/sessionLinkList"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:baselineAligned="false"
-            android:orientation="vertical"
-            android:padding="5dp"
-            android:scrollbars="vertical"></LinearLayout>
     </LinearLayout>
 </ScrollView>
 

@@ -17,31 +17,31 @@ package com.ehret.mixit.domain.talk;
 
 import com.ehret.mixit.domain.Salle;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Classe mère des conferences contenant les données communes
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Talk {
-    private long idSession;
-    private int votes;
-    private int positiveVotes;
+    private String idSession;
     private String title;
     private String lang;
     private String summary;
     private String format;
     private String description;
-    private List<String> interests;
-    private List<Speaker> speakers;
+    private List<Speaker> speakers = new ArrayList<>();
     private Date start;
     private Date end;
     private String room;
+    private String track;
 
-    public static Talk buildEventSpecial(String titleFormat, long id){
+    public static Talk buildEventSpecial(String titleFormat, String id){
         return new Talk()
                 .setIdSession(id)
                 .setFormat(titleFormat)
@@ -79,6 +79,14 @@ public class Talk {
         return  this;
     }
 
+    public String getTrack() {
+        return track;
+    }
+
+    public Talk setTrack(String track) {
+        this.track = track;
+        return  this;
+    }
 
     public String getTitle() {
         return title;
@@ -107,15 +115,6 @@ public class Talk {
         return  this;
     }
 
-    public List<String> getInterests() {
-        return interests;
-    }
-
-    public Talk setInterests(List<String> interests) {
-        this.interests = interests;
-        return  this;
-    }
-
     public List<Speaker> getSpeakers() {
         return speakers;
     }
@@ -125,30 +124,12 @@ public class Talk {
         return  this;
     }
 
-    public long getIdSession() {
+    public String getIdSession() {
         return idSession;
     }
 
-    public Talk setIdSession(long idSession) {
+    public Talk setIdSession(String idSession) {
         this.idSession = idSession;
-        return  this;
-    }
-
-    public int getVotes() {
-        return votes;
-    }
-
-    public Talk setVotes(int votes) {
-        this.votes = votes;
-        return  this;
-    }
-
-    public int getPositiveVotes() {
-        return positiveVotes;
-    }
-
-    public Talk setPositiveVotes(int positiveVotes) {
-        this.positiveVotes = positiveVotes;
         return  this;
     }
 
@@ -182,8 +163,6 @@ public class Talk {
 
     @Override
     public int hashCode() {
-        return (int) (idSession ^ (idSession >>> 32));
+        return Objects.hash(idSession);
     }
-
-
 }

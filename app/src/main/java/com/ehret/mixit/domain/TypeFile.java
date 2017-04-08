@@ -27,6 +27,7 @@ public enum TypeFile {
     workshops,
     members,
     lightningtalks,
+    user,
     sponsor,
     favorites,
     interests;

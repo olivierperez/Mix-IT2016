@@ -76,7 +76,6 @@
             android:paddingTop="4dp"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
-
     </RelativeLayout>
 
 </LinearLayout>

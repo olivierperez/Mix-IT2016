@@ -16,7 +16,7 @@
 package com.ehret.mixit.domain.twitter;
 
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
 

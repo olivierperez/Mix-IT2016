@@ -16,24 +16,22 @@
 package com.ehret.mixit.domain;
 
 /**
- * Differents fichiers Json recuperes sur le site Mix-it
+ * Differents fichiers Json recuperes sur le site MiXiT
  */
 public enum JsonFile {
-    FileTest(TypeFile.test, "https://www.mix-it.fr/api/session/2692"),
-    FileSpeaker(TypeFile.speaker, "https://www.mix-it.fr/api/member/speaker"),
-    FileSpeakerLT(TypeFile.speakerlt, "https://www.mix-it.fr/api/member/speaker/lightningtalks"),
-    FileStaff(TypeFile.staff, "https://www.mix-it.fr/api/member/staff"),
-    FileMembers(TypeFile.members, "https://www.mix-it.fr/api/member"),
-    FileTalks(TypeFile.talks, "https://www.mix-it.fr/api/session"),
-    FileSponsor(TypeFile.sponsor, "https://www.mix-it.fr/api/member/sponsor"),
-    FileFavorites(TypeFile.favorites, "http://www.mix-it.fr/api/members/%d/favorites");
+    FileStaff(TypeFile.staff, "https://mixitconf.org/api/staff", false),
+    FileTalks(TypeFile.talks, "https://mixitconf.org/api/talk", false),
+    FileEvent(TypeFile.sponsor, "https://mixitconf.org/api/event/mixit17" , false),
+    FileUser(TypeFile.user, "https://mixitconf.org/api/user", false);
 
     private String url;
     private TypeFile type;
+    private boolean readRemote;
 
-    private JsonFile(TypeFile type, String url) {
+    private JsonFile(TypeFile type, String url, boolean readRemote) {
         this.url = url;
         this.type = type;
+        this.readRemote = readRemote;
     }
 
     public String getUrl() {
@@ -42,5 +40,9 @@ public enum JsonFile {
 
     public TypeFile getType() {
         return type;
+    }
+
+    public boolean isReadRemote() {
+        return readRemote;
     }
 }

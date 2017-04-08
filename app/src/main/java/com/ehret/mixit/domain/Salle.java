@@ -25,33 +25,38 @@ import com.ehret.mixit.R;
  * To change this template use File | Settings | File Templates.
  */
 public enum Salle {
-    SALLE1("Gosling", R.color.salle1, R.drawable.salle1_background,1, "Gos."),
-    SALLE2("Eich", R.color.salle2, R.drawable.salle2_background,1, "Eich"),
-    SALLE3("Nonaka", R.color.salle3, R.drawable.salle3_background,1,"Non."),
-    SALLE4("Dijkstra", R.color.salle4, R.drawable.salle4_background,1,"Dij."),
-    SALLE5("Turing", R.color.salle5, R.drawable.salle5_background,1, "Tur."),
-    SALLE6("Lovelace", R.color.salle6, R.drawable.salle6_background,1, "Lov."),
-    SALLE7("Grand Amphi", R.color.salle7, R.drawable.salle7_background,0, "G.A."),
-    SALLE8("Petit Amphi", R.color.salle8, R.drawable.salle8_background,0, "P.A."),
-    SALLE9("Mezzanine", R.color.salle9, R.drawable.salle9_background,2, "Mez."),
-    INCONNU("Inconnue", R.color.grey, 0,0, "");
+    SALLE1("Gosling", R.color.salle1, R.drawable.salle1_background,1, "Gos.","ROOM1"),
+    SALLE2("Eich", R.color.salle2, R.drawable.salle2_background,1, "Eich","ROOM2"),
+    SALLE3("Nonaka", R.color.salle3, R.drawable.salle3_background,1,"Non.","ROOM3"),
+    SALLE4("Dijkstra", R.color.salle4, R.drawable.salle4_background,1,"Dij.","ROOM4"),
+    SALLE5("Turing", R.color.salle5, R.drawable.salle5_background,1, "Tur.","ROOM5"),
+    SALLE7("Amphi Lovelace", R.color.salle7, R.drawable.salle7_background,0, "G.A.", "AMPHI1"),
+    SALLE8("Amphi Hamilton", R.color.salle8, R.drawable.salle8_background,0, "P.A.", "AMPHI2"),
+    SALLE9("Mezzanine", R.color.salle9, R.drawable.salle9_background,2, "Mez.", "ROOM7"),
+    INCONNU("Inconnue", R.color.grey, 0,0, "", "");
 
     private String nom;
     private int color;
     private int drawable;
     private int etage;
     private String suffix;
+    private String remoteName;
 
-    private Salle(String nom, int color,int drawable, int etage, String suffix) {
+    private Salle(String nom, int color,int drawable, int etage, String suffix, String remoteName) {
         this.nom = nom;
         this.color = color;
         this.drawable=drawable;
         this.etage=etage;
         this.suffix=suffix;
+        this.remoteName = remoteName;
     }
 
     public String getNom() {
         return nom;
+    }
+
+    public String getRemoteName() {
+        return remoteName;
     }
 
     public int getColor() {
@@ -63,7 +68,7 @@ public enum Salle {
     public static Salle getSalle(String nom) {
         if (nom != null) {
             for (Salle salle : values()) {
-                if (salle.getNom().equals(nom)) {
+                if (salle.getRemoteName().equals(nom)) {
                     return salle;
                 }
             }

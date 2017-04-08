@@ -27,7 +27,7 @@ import com.ehret.mixit.utils.FileUtils;
 
 /**
  * Boite de dialogue permettant de synchroniser les données à partir des
- * webservices mises à disposition sur le sit eweb de mix-it
+ * webservices mises à disposition sur le sit eweb de MiXiT
  */
 public class DialogAboutFragment extends DialogFragment {
 

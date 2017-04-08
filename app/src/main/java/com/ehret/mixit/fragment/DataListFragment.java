@@ -52,7 +52,7 @@ public class DataListFragment extends Fragment {
         if(activity!=null && getArguments().getString(UIUtils.ARG_LIST_TYPE)!=null){
             ((HomeActivity) getActivity()).onSectionAttached(
                     "title_" + getArguments().getString(UIUtils.ARG_LIST_TYPE),
-                    "color_" + getArguments().getString(UIUtils.ARG_LIST_TYPE));
+                    "color_primary");
         }
     }
 
@@ -100,9 +100,6 @@ public class DataListFragment extends Fragment {
             case workshops:
                 afficherConference();
                 break;
-            case lightningtalks:
-                afficherConference();
-                break;
             case favorites:
                 afficherConference();
                 break;
@@ -128,7 +125,7 @@ public class DataListFragment extends Fragment {
                 ((HomeActivity) getActivity()).changeCurrentFragment(
                         PeopleDetailFragment.newInstance(
                                 getArguments().getString(UIUtils.ARG_LIST_TYPE),
-                                membre.getIdMember(),
+                                membre.getLogin(),
                                 getArguments().getInt(UIUtils.ARG_SECTION_NUMBER)),
                         getArguments().getString(UIUtils.ARG_LIST_TYPE));
             }
@@ -171,9 +168,6 @@ public class DataListFragment extends Fragment {
                 break;
             case talks:
                 liste.setAdapter(new ListTalkAdapter(context, ConferenceFacade.getInstance().getTalks(context, filter)));
-                break;
-            case lightningtalks:
-                liste.setAdapter(new ListTalkAdapter(context, ConferenceFacade.getInstance().getLightningTalks(context, filter)));
                 break;
             default:
                 liste.setAdapter(new ListTalkAdapter(context, ConferenceFacade.getInstance().getFavorites(context, filter)));

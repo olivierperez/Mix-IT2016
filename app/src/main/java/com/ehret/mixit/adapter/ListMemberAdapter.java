@@ -18,6 +18,7 @@ package com.ehret.mixit.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 import com.ehret.mixit.R;
 import com.ehret.mixit.domain.people.Member;
 import com.ehret.mixit.utils.FileUtils;
+import com.github.rjeschke.txtmark.Processor;
 
 import java.util.List;
 
@@ -78,7 +80,7 @@ public class ListMemberAdapter extends BaseAdapter {
         final Member person = datas.get(position);
         holder.userName.setText(person.getCompleteName());
         if (person.getShortDescription() != null) {
-            holder.descriptif.setText(person.getShortDescription().trim());
+            holder.descriptif.setText(Html.fromHtml(Processor.process(person.getShortDescription().trim())).toString().replaceAll("\n", ""));
         }
 
         Bitmap image = null;

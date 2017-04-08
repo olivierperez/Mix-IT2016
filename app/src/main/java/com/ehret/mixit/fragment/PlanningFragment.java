@@ -55,7 +55,7 @@ public class PlanningFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        ((HomeActivity) activity).onSectionAttached("title_section_planning","color_planning");
+        ((HomeActivity) activity).onSectionAttached("title_section_planning","color_primary");
     }
 
     /**
@@ -152,9 +152,8 @@ public class PlanningFragment extends Fragment {
                     .with(salleTableLayout)
                     .createSalle(Salle.SALLE1, Salle.SALLE2, false)
                     .createSalle(Salle.SALLE3, Salle.SALLE4, false)
-                    .createSalle(Salle.SALLE5, Salle.SALLE6, false)
-                    .createSalle(Salle.SALLE7, Salle.SALLE8, false)
-                    .createSalle(Salle.SALLE9, Salle.INCONNU, true);
+                    .createSalle(Salle.SALLE5, Salle.SALLE7, false)
+                    .createSalle(Salle.SALLE8, Salle.SALLE9, true);
 
             TableLayout planningHoraireTableLayout = (TableLayout) view.findViewById(R.id.planningHoraireTableLayout);
             final GridLayout calendarGrid = (GridLayout) view.findViewById(R.id.planningGrid);

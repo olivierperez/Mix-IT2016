@@ -26,7 +26,7 @@
     <FrameLayout
         android:id="@+id/container2"
         android:layout_width="@dimen/speaker_image_size"
-        android:layout_height="@dimen/session_image_size"
+        android:layout_height="@dimen/session_talk_height"
         android:layout_gravity="center_vertical">
 
         <ImageView
@@ -34,16 +34,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|top"
+            android:paddingBottom="6dp"
             android:scaleType="fitCenter" />
 
         <TextView
             android:id="@+id/talkImageText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|bottom"
+            android:layout_gravity="center_horizontal|center"
             android:textColor="@color/grey_dark"
             android:textSize="@dimen/text_size_small"
+            android:paddingTop="2sp"
+            android:paddingBottom="2sp"
             android:textStyle="bold" />
+
+        <ImageView
+                android:id="@+id/talk_image_track"
+                android:layout_width="@dimen/track_image_size"
+                android:layout_height="@dimen/track_image_size"
+                android:layout_gravity="center_horizontal|bottom"
+                android:paddingTop="0dp"
+                android:scaleType="fitCenter" />
     </FrameLayout>
 
     <RelativeLayout

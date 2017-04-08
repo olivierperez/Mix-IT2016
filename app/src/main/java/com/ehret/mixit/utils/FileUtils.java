@@ -89,7 +89,7 @@ public class FileUtils {
         if (membre == null)
             return null;
         if (membre.getUrlImage() != null) {
-            File myFile = new File(context.getExternalFilesDir(Environment.DIRECTORY_DCIM), "membre" + membre.getIdMember() + ".jpg");
+            File myFile = new File(context.getExternalFilesDir(Environment.DIRECTORY_DCIM), "membre" + membre.getLogin() + ".jpg");
             if (myFile.exists()) {
                 try {
                     return BitmapFactory.decodeStream(new FileInputStream(myFile));
@@ -105,7 +105,7 @@ public class FileUtils {
 
     public static Bitmap getImageLogo(Context context, Member membre) {
         if (membre.getLogo() != null) {
-            File myFile = new File(context.getExternalFilesDir(Environment.DIRECTORY_DCIM), "logo" + membre.getIdMember() + ".jpg");
+            File myFile = new File(context.getExternalFilesDir(Environment.DIRECTORY_DCIM), "logo" + membre.getLogin() + ".jpg");
             if (myFile.exists()) {
                 try {
                     return BitmapFactory.decodeStream(new FileInputStream(myFile));
@@ -125,14 +125,8 @@ public class FileUtils {
         //Sinon on prend celui dans les raw file
         InputStream is;
         switch (typeFile) {
-             case lightningtalks:
-                is = context.getResources().openRawResource(R.raw.ligthningtalk);
-                break;
-            case speaker:
-                is = context.getResources().openRawResource(R.raw.speaker);
-                break;
             case members:
-                is = context.getResources().openRawResource(R.raw.member);
+                is = context.getResources().openRawResource(R.raw.user);
                 break;
             case sponsor:
                 is = context.getResources().openRawResource(R.raw.sponsor);

@@ -87,6 +87,7 @@ public class ListTalkForFilAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_talk, parent, false);
             holder = new ViewHolder();
             holder.imageFavorite = (ImageView) convertView.findViewById(R.id.talk_image_favorite);
+            holder.imageTrack = (ImageView) convertView.findViewById(R.id.talk_image_track);
             holder.langImage = (ImageView) convertView.findViewById(R.id.talk_image_language);
             holder.name = (TextView) convertView.findViewById(R.id.talk_name);
             holder.descriptif = (TextView) convertView.findViewById(R.id.talk_shortdesciptif);
@@ -115,6 +116,7 @@ public class ListTalkForFilAdapter extends BaseAdapter {
             holder.talkImageText.setText(null);
             holder.talkSalle.setText(null);
             holder.imageFavorite.setImageDrawable(null);
+            holder.imageTrack.setImageDrawable(null);
             holder.horaire.setText(null);
 
             if (conf.getFormat() != null && "day1".equals(conf.getFormat())) {
@@ -147,7 +149,7 @@ public class ListTalkForFilAdapter extends BaseAdapter {
                 convertView.setBackground(context.getResources().getDrawable(R.drawable.selector_fildeleau_session));
             }
 
-            if(conf.getLang()!=null && "en".equals(conf.getLang())){
+            if(conf.getLang()!=null && "ENGLISH".equals(conf.getLang())){
                 holder.langImage.setImageDrawable(context.getResources().getDrawable(R.drawable.en));
             }
             else{
@@ -191,6 +193,29 @@ public class ListTalkForFilAdapter extends BaseAdapter {
             if (!trouve) {
                 holder.imageFavorite.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_not_important));
             }
+            if(conf.getTrack()!=null){
+                switch (conf.getTrack()){
+                    case "aliens":
+                        holder.imageTrack.setImageDrawable(context.getResources().getDrawable(R.drawable.mxt_icon__aliens));
+                        break;
+                    case "design":
+                        holder.imageTrack.setImageDrawable(context.getResources().getDrawable(R.drawable.mxt_icon__design));
+                        break;
+                    case "hacktivism":
+                        holder.imageTrack.setImageDrawable(context.getResources().getDrawable(R.drawable.mxt_icon__hack));
+                        break;
+                    case "tech":
+                        holder.imageTrack.setImageDrawable(context.getResources().getDrawable(R.drawable.mxt_icon__tech));
+                        break;
+                    case "learn":
+                        holder.imageTrack.setImageDrawable(context.getResources().getDrawable(R.drawable.mxt_icon__learn));
+                        break;
+                    case "makers":
+                        holder.imageTrack.setImageDrawable(context.getResources().getDrawable(R.drawable.mxt_icon__makers));
+                        break;
+                }
+
+            }
 
             Salle salle;
             if (Salle.INCONNU != Salle.getSalle(conf.getRoom())) {
@@ -208,12 +233,22 @@ public class ListTalkForFilAdapter extends BaseAdapter {
                 holder.talkSalle.setText("");
             }
 
-            if ("Workshop".equals(conf.getFormat())) {
+            if ("WORKSHOP".equals(conf.getFormat())) {
                 holder.talkImageText.setText("Atelier");
                 holder.talkImageText.setTextColor(context.getResources().getColor(R.color.color_workshops));
             }
+            else if ("KEYNOTE".equals(((Talk) conf).getFormat())) {
+                holder.talkImageText.setText("Keynote");
+            }
+            else if ("RANDOM".equals(((Talk) conf).getFormat())) {
+                holder.talkImageText.setText("Random");
+            }
+            else if ("TALK".equals(((Talk) conf).getFormat())) {
+                holder.talkImageText.setText("Talk");
+            }
             else if(("Special".equals(conf.getFormat()))) {
                 holder.imageFavorite.setImageDrawable(null);
+                holder.imageTrack.setImageDrawable(null);
                 holder.talkImageText.setText("");
             }
             else {
@@ -233,6 +268,7 @@ public class ListTalkForFilAdapter extends BaseAdapter {
         TextView talkImageText;
         TextView talkSalle;
         ImageView imageFavorite;
+        ImageView imageTrack;
         FrameLayout container2;
         RelativeLayout container3;
         ImageView langImage;

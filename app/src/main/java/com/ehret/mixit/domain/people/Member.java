@@ -1,8 +1,10 @@
 package com.ehret.mixit.domain.people;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
+import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 /**
  * Member DTO for API HATEOAS
@@ -10,7 +12,6 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Member {
 
-    private Long idMember;
     private String login;
     private String firstname;
     private String lastname;
@@ -19,21 +20,11 @@ public class Member {
     private String hash;
     private String shortDescription;
     private String longDescription;
+    private boolean sponsor;
+    private boolean speaker;
 
-
-    private List<String> interests;
-    private List<Long> sessions;
-    private List<Link> shareLinks;
-    private List<Level> level;
-
-    public Long getIdMember() {
-        return idMember;
-    }
-
-    public Member setIdMember(Long idMember) {
-        this.idMember = idMember;
-        return this;
-    }
+    private List<Link> shareLinks = new ArrayList<>();
+    private List<Level> level = new ArrayList<>();
 
     public String getLogin() {
         return login;
@@ -53,11 +44,17 @@ public class Member {
         return this;
     }
 
-    public String getUrlImage(){
-        if(this.logo!=null){
-            return "http://www.mix-it.fr/img/" + this.logo;
+    public String getUrlImage() {
+        if(this.logo != null){
+            if(this.logo.startsWith("/images")){
+                return "https://mixitconf.org/" + this.logo;
+            }
+            if(this.logo.startsWith("sponsor")){
+                return "https://mixitconf.org/images/" + this.logo;
+            }
+            return this.logo;
         }
-        else if(this.hash !=null){
+        if (this.hash != null) {
             return "https://www.gravatar.com/avatar/" + this.hash;
         }
         return null;
@@ -91,16 +88,14 @@ public class Member {
     }
 
     public String getShortDescription() {
-        return shortDescription;
-    }
-
-    public Member setShortDescription(String shortDescription) {
-        this.shortDescription = shortDescription;
-        return this;
+        if (getLongDescription().length() > 100) {
+            return getLongDescription().substring(0, 100) + " ...";
+        }
+        return getLongDescription();
     }
 
     public String getLongDescription() {
-        return longDescription;
+        return longDescription == null ? "" : longDescription;
     }
 
     public Member setLongDescription(String longDescription) {
@@ -113,26 +108,17 @@ public class Member {
     }
 
     public String getCompleteName() {
-        if(isSponsor()){
+        if (isSponsor()) {
             return company + "  [" + level.get(0).getKey() + "]";
         }
-        if(firstname ==null || "".equals(firstname)){
-            return lastname !=null ? lastname.toUpperCase() : "unknown";
+        if (firstname == null || "".equals(firstname)) {
+            return lastname != null ? lastname.toUpperCase() : "unknown";
         }
-        return lastname.toUpperCase() + " " + firstname;
+        return firstname + " " + lastname.toUpperCase();
     }
 
     public Member setHash(String hash) {
         this.hash = hash;
-        return this;
-    }
-
-    public List<String> getInterests() {
-        return interests;
-    }
-
-    public Member setInterests(List<String> interests) {
-        this.interests = interests;
         return this;
     }
 
@@ -145,6 +131,20 @@ public class Member {
         return this;
     }
 
+    public Member setSponsor(boolean sponsor) {
+        this.sponsor = sponsor;
+        return this;
+    }
+
+    public boolean isSpeaker() {
+        return speaker;
+    }
+
+    public Member setSpeaker(boolean speaker) {
+        this.speaker = speaker;
+        return this;
+    }
+
     public List<Level> getLevel() {
         return level;
     }
@@ -153,16 +153,8 @@ public class Member {
         this.level = level;
     }
 
-    public List<Long> getSessions() {
-        return sessions;
-    }
-
-    public void setSessions(List<Long> sessions) {
-        this.sessions = sessions;
-    }
-
-    public boolean isSponsor(){
-        return getLevel() != null && !getLevel().isEmpty() && getLevel().get(0).getKey()!=null && !"".equals(getLevel().get(0).getKey());
+    public boolean isSponsor() {
+        return getLevel() != null && !getLevel().isEmpty() && getLevel().get(0).getKey() != null && !"".equals(getLevel().get(0).getKey());
     }
 
 }

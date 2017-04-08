@@ -9,6 +9,7 @@
     <dimen name="text_size_medium">14sp</dimen>
     <dimen name="text_size_large">18sp</dimen>
     <dimen name="speaker_image_size">48dp</dimen>
+    <dimen name="track_image_size">30dp</dimen>
     <dimen name="speaker_image_padding">8dp</dimen>
     <dimen name="text_size_button_salle">24sp</dimen>
 

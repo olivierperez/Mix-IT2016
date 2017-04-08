@@ -1,7 +1,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="app_name" translatable="false">Mix-IT 2016</string>
+    <string name="app_name" translatable="false">MiXiT 2017</string>
 
-    <string name="title_section_home" translatable="false">Mix-IT 2016</string>
+    <string name="title_section_home" translatable="false">MiXiT 2017</string>
     <string name="title_section_planning" translatable="false">Planning</string>
     <string name="title_section_fildeleau">Le fil de l\'eau</string>
     <string name="title_section_talk" translatable="false">Talks</string>
@@ -42,24 +42,24 @@
 
     <string name="blank" translatable="false"> </string>
     <string name="onload">Téléchargement en cours.</string>
-    <string name="welcome">Bienvenue sur l\'application mobile Mix-IT qui vous donne accès à toute la programmation de cette conférence</string>
+    <string name="welcome">La conférence Lyonnaise avec des crêpes et du cœur</string>
     <string name="about">A propos</string>
     <string name="search_hint">texte</string>
-    <string name="mixit_url" translatable="false">https://www.mix-it.fr/venir</string>
-    <string name="hastag" translatable="false">#mixit16</string>
+    <string name="mixit_url" translatable="false">https://mixitconf.org/come</string>
+    <string name="hastag" translatable="false">#mixit17</string>
     <!-- Compteur -->
     <string name="whats_on_countdown_title_0">Plus que </string>
     <plurals name="whats_on_countdown_title">
-        <item quantity="one"><xliff:g id="number_of_days">%1$s</xliff:g> jours, <xliff:g id="remaining_time">%2$s</xliff:g>\navant de nous retrouver à Mix-IT</item>
-        <item quantity="other"><xliff:g id="number_of_days">%1$s</xliff:g> jours, <xliff:g id="remaining_time">%2$s</xliff:g>\navant de nous retrouver à Mix-IT</item>
+        <item quantity="one"><xliff:g id="number_of_days">%1$s</xliff:g> jours, <xliff:g id="remaining_time">%2$s</xliff:g>\navant de nous retrouver à MiXiT</item>
+        <item quantity="other"><xliff:g id="number_of_days">%1$s</xliff:g> jours, <xliff:g id="remaining_time">%2$s</xliff:g>\navant de nous retrouver à MiXiT</item>
     </plurals>
     <string name="whats_on_thank_you_title">A l\'année prochaine!</string>
 
 
     <!-- Import favoris -->
     <string name="description_link_user">Lié ce compte à l\'application. Le fait de vous lier à votre compte supprimera tous les favoris déjà définis</string>
-    <string name="description_link_user_confirm">Le lien permet de récupérer vos favoris sur le site de Mix-IT. Par contre la synchronisation des liens ne se fait que dans un sens (du site vers l\'application) car le site Mix-IT ne permet pas de les mettre à jour. </string>
-    <string name="description_link_user_error">Aucun compte mix-IT n\'est lié à l\'application. Vous devez aller sur votre profil dans la liste des membres et cliquez sur le bouton lien dans la barre de bouton</string>
+    <string name="description_link_user_confirm">Le lien permet de récupérer vos favoris sur le site de MiXiT. Par contre la synchronisation des liens ne se fait que dans un sens (du site vers l\'application) car le site MiXiT ne permet pas de les mettre à jour. </string>
+    <string name="description_link_user_error">Aucun compte MiXiT n\'est lié à l\'application. Vous devez aller sur votre profil dans la liste des membres et cliquez sur le bouton lien dans la barre de bouton</string>
 
     <!-- Menu -->
     <string name="description_refresh">Rafraîchir</string>
@@ -71,7 +71,7 @@
 
     <string name="description_sync_speaker">Raffraîchir données Speakers</string>
     <string name="description_sync_favorites">Raffraîchir vos favoris</string>
-    <string name="description_sync_talk">Raffraîchir données Talks</string>
+    <string name="description_sync_talk">Recharger données du serveur MiXiT</string>
     <string name="description_sync_membre">Raffraîchir données Membres</string>
     <string name="description_search">Rechercher</string>
     <string name="description_favorite_add">Mettre en favori</string>
@@ -82,6 +82,7 @@
     <string name="description_workshop">Ateliers</string>
     <string name="description_ligtningtalk" translatable="false">Lightning Talk</string>
     <string name="description_people" translatable="false">People</string>
+    <string name="description_track" translatable="false">Track</string>
     <string name="description_speakers" translatable="false">Speakers</string>
     <string name="description_staff" translatable="false">Staffs</string>
     <string name="description_membres">Membres</string>
@@ -90,7 +91,7 @@
     <string name="description_map2">Soirée</string>
     <string name="description_venir">Comment venir</string>
     <string name="description_howtocome">Cliquez sur l\'une des deux cartes pour naviguer vers le lieu de a conférence ou vers le lieu de la soirée</string>
-    <string name="description_venir_mixit">Comment venir à Mix-IT</string>
+    <string name="description_venir_mixit">Comment venir à MiXiT</string>
     <string name="description_plusinfo">Plus dinformations</string>
     <string name="description_liens">Liens</string>
     <string name="description_interet">Intérêts</string>
@@ -122,8 +123,8 @@
     <string name="calendrier_partie" translatable="false">Mixit Party</string>
 
     <string name="calendrier_repas">Repas</string>
-    <string name="calendrier_jour1">Jeudi 21 avril</string>
-    <string name="calendrier_jour2">Vendredi 22 avril</string>
+    <string name="calendrier_jour1">Jeudi 20 avril</string>
+    <string name="calendrier_jour2">Vendredi 21 avril</string>
     <string name="calendrier_stream" translatable="false">Fil</string>
 
     <string name="calendrier_explication"> </string>
@@ -152,18 +153,18 @@
 
     <!-- About -->
     <string name="about_titre">A propos</string>
-    <string name="about_h1" translatable="false">Mix-IT 2016 Client</string>
+    <string name="about_h1" translatable="false">MiXiT 2017 Client</string>
     <string name="about_cree" translatable="false">Created by Guillaume EHRET</string>
     <string name="about_createur" translatable="false">https://twitter.com/guillaumeehret</string>
-    <string name="about_blog" translatable="false">http://dev-mind.fr/</string>
+    <string name="about_blog" translatable="false">https://www.dev-mind.fr/</string>
     <string name="about_blogurl" translatable="false">http://javamind-fr.blogspot.fr/</string>
     <string name="about_help">Si vous rencontrez des problèmes pour afficher les informations cliquez sur le bouton RAZ pour supprimer les fichiers téléchargés et revenir dans la configuration d\'origine</string>
 
     <!-- Synchronize -->
-    <string name="sync_erreur">Impossible de charger les données su site Mix-IT : le stockage est inaccessible</string>
-    <string name="sync_erreur_reseau">Impossible de charger les données su site Mix-IT : réseau inaccessible</string>
+    <string name="sync_erreur">Impossible de charger les données su site MiXiT : le stockage est inaccessible</string>
+    <string name="sync_erreur_reseau">Impossible de charger les données su site MiXiT : réseau inaccessible</string>
     <string name="sync_message_title" translatable="false">Synchronisation</string>
-    <string name="sync_message">Lancement de la récupération des données Mix-IT</string>
+    <string name="sync_message">Lancement de la récupération des données MiXiT</string>
     <string name="sync_progress" translatable="false">Progression de la tâche asynchrone:</string>
 
     <!--Dialogue-->

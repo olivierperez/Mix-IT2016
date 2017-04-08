@@ -40,7 +40,7 @@ public class HomeFragment extends Fragment {
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW);
                 mapIntent.setData(Uri.parse("geo:45.78392,4.869014?z=17&q=CPE+Lyon,+43+Boulevard+du+11+novembre,+69616+Villeurbanne"));
                 UIUtils.filterIntent(getActivity(), "maps", mapIntent);
-                startActivity(Intent.createChooser(mapIntent, "Conférence Mix-IT"));
+                startActivity(Intent.createChooser(mapIntent, "Conférence MiXiT"));
             }
         });
         TextView mapText2 = (TextView) getActivity().findViewById(R.id.mapTextView2);
@@ -50,7 +50,7 @@ public class HomeFragment extends Fragment {
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW);
                 mapIntent.setData(Uri.parse("geo:45.767643,4.8328633?z=17&q=Hôtel+de+Ville+de+Lyon"));
                 UIUtils.filterIntent(getActivity(), "maps", mapIntent);
-                startActivity(Intent.createChooser(mapIntent, "Soirée Mix-IT"));
+                startActivity(Intent.createChooser(mapIntent, "Soirée MiXiT"));
             }
         });
     }

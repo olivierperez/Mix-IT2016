@@ -68,9 +68,10 @@ public class SessionDetailFragment extends Fragment {
     private TextView summary;
     private TextView descriptif;
     private TextView salle;
+    private TextView track;
     private ImageView imageFavorite;
+    private ImageView imageTrack;
     private ImageView langImage;
-    private LinearLayout sessionLinkList;
     private LinearLayout sessionPersonList;
     private LayoutInflater mInflater;
     private HtmlTagHandler htmlTagHandler = new HtmlTagHandler();
@@ -79,11 +80,11 @@ public class SessionDetailFragment extends Fragment {
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static SessionDetailFragment newInstance(String typeAppel, Long message, int sectionNumber) {
+    public static SessionDetailFragment newInstance(String typeAppel, String message, int sectionNumber) {
         SessionDetailFragment fragment = new SessionDetailFragment();
         Bundle args = new Bundle();
         args.putString(UIUtils.ARG_LIST_TYPE, typeAppel);
-        args.putLong(UIUtils.ARG_ID, message);
+        args.putString(UIUtils.ARG_ID, message);
         args.putInt(UIUtils.ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
@@ -96,15 +97,16 @@ public class SessionDetailFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_session, container, false);
 
         this.imageFavorite = (ImageView) rootView.findViewById(R.id.talk_image_favorite);
+        this.imageTrack = (ImageView) rootView.findViewById(R.id.talk_image_track);
         this.horaire = (TextView) rootView.findViewById(R.id.talk_horaire);
         this.level = (TextView) rootView.findViewById(R.id.talk_level);
         this.name = (TextView) rootView.findViewById(R.id.talk_name);
         this.summary = (TextView) rootView.findViewById(R.id.talk_summary);
         this.descriptif = (TextView) rootView.findViewById(R.id.talk_desciptif);
         this.salle = (TextView) rootView.findViewById(R.id.talk_salle);
-        this.sessionLinkList = (LinearLayout) rootView.findViewById(R.id.sessionLinkList);
         this.sessionPersonList = (LinearLayout) rootView.findViewById(R.id.sessionPersonList);
         this.langImage = (ImageView) rootView.findViewById(R.id.talk_image_language);
+        this.track = (TextView) rootView.findViewById(R.id.talk_track);
 
         this.imageFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +127,7 @@ public class SessionDetailFragment extends Fragment {
         super.onAttach(activity);
         ((HomeActivity) activity).onSectionAttached(
                 "title_detail_" + getArguments().getString(UIUtils.ARG_LIST_TYPE),
-                "color_" + getArguments().getString(UIUtils.ARG_LIST_TYPE));
+                "color_primary");
     }
 
     @Override
@@ -145,13 +147,11 @@ public class SessionDetailFragment extends Fragment {
         Context context = getActivity().getBaseContext();
 
         //On commence par recuperer le Membre que l'on sohaite afficher
-        Long id = getArguments().getLong(UIUtils.ARG_ID);
+        String id = getArguments().getString(UIUtils.ARG_ID);
         String type = getArguments().getString(UIUtils.ARG_LIST_TYPE);
 
         Talk conference;
-        if (TypeFile.lightningtalks.name().equals(type)) {
-            conference = ConferenceFacade.getInstance().getLightningtalk(context, id);
-        } else if (TypeFile.workshops.name().equals(type)) {
+        if (TypeFile.workshops.name().equals(type)) {
             conference = ConferenceFacade.getInstance().getTalk(context, id);
         } else {
             conference = ConferenceFacade.getInstance().getTalk(context, id);
@@ -159,7 +159,6 @@ public class SessionDetailFragment extends Fragment {
 
         addGeneralInfo(conference);
         addSpeakerInfo(conference);
-        addInterestInfo(conference);
     }
 
     private void addGeneralInfo(Talk conference) {
@@ -174,19 +173,52 @@ public class SessionDetailFragment extends Fragment {
             horaire.setText(getResources().getString(R.string.pasdate));
 
         }
-        level.setText("votes : " + conference.getPositiveVotes());
         name.setText(conference.getTitle());
-        summary.setText(Html.fromHtml(Processor.process(conference.getSummary()).trim()));
-
-        descriptif.setText(
-                Html.fromHtml(
-                        Processor.process(conference.getDescription(), Configuration.builder().forceExtentedProfile().build()).trim(), null, htmlTagHandler),
-                TextView.BufferType.SPANNABLE);
-
+        if(conference.getSummary()!=null) {
+            summary.setText(Html.fromHtml(Processor.process(conference.getSummary()).trim()));
+        }
+        if(conference.getDescription()!=null) {
+            descriptif.setText(
+                    Html.fromHtml(
+                            Processor.process(conference.getDescription(), Configuration.builder().forceExtentedProfile().build()).trim(), null, htmlTagHandler),
+                    TextView.BufferType.SPANNABLE);
+        }
         final Salle room = Salle.getSalle(conference.getRoom());
 
+        if(conference.getTrack()!=null){
+            switch (conference.getTrack()){
+                case "aliens":
+                    imageTrack.setImageDrawable(getResources().getDrawable(R.drawable.mxt_icon__aliens));
+                    track.setText("Track Alien");
+                    break;
+                case "design":
+                    imageTrack.setImageDrawable(getResources().getDrawable(R.drawable.mxt_icon__design));
+                    track.setText("Track Design");
+                    break;
+                case "hacktivism":
+                    imageTrack.setImageDrawable(getResources().getDrawable(R.drawable.mxt_icon__hack));
+                    track.setText("Track Hacktivism");
+                    break;
+                case "tech":
+                    imageTrack.setImageDrawable(getResources().getDrawable(R.drawable.mxt_icon__tech));
+                    track.setText("Track Tech");
+                    break;
+                case "learn":
+                    imageTrack.setImageDrawable(getResources().getDrawable(R.drawable.mxt_icon__learn));
+                    track.setText("Track Learn");
+                    break;
+                case "makers":
+                    imageTrack.setImageDrawable(getResources().getDrawable(R.drawable.mxt_icon__makers));
+                    track.setText("Track Makers");
+                    break;
+                default:
+                    imageTrack.setImageDrawable(null);
+                    track.setText("");
+            }
 
-        if (conference.getLang() != null && "en".equals(conference.getLang())) {
+        }
+
+        if (conference.getLang() != null && "ENGLISH".equals(conference.getLang())) {
             langImage.setImageDrawable(getResources().getDrawable(R.drawable.en));
         } else {
             langImage.setImageDrawable(getResources().getDrawable(R.drawable.fr));
@@ -216,9 +248,7 @@ public class SessionDetailFragment extends Fragment {
         List<Member> speakers = new ArrayList<>();
         for (Speaker member : conference.getSpeakers()) {
             Member membre = MembreFacade.getInstance().getMembre(getActivity(), TypeFile.speaker.name(), member.getIdMember());
-            if (membre == null) {
-                membre = MembreFacade.getInstance().getMembre(getActivity(), TypeFile.speakerlt.name(), member.getIdMember());
-            }
+
             if (membre != null) {
                 speakers.add(membre);
             }
@@ -266,7 +296,7 @@ public class SessionDetailFragment extends Fragment {
                             ((HomeActivity) getActivity()).changeCurrentFragment(
                                     PeopleDetailFragment.newInstance(
                                             TypeFile.speaker.toString(),
-                                            membre.getIdMember(),
+                                            membre.getLogin(),
                                             7),
                                     TypeFile.speaker.toString());
                         }
@@ -276,33 +306,6 @@ public class SessionDetailFragment extends Fragment {
                 }
             }
             sessionPersonList.addView(tableLayout);
-        }
-    }
-
-
-    private void addInterestInfo(Talk conference) {
-        //On vide les éléments
-        sessionLinkList.removeAllViews();
-        //On affiche les liens que si on a recuperer des choses
-        if (conference.getInterests() != null && !conference.getInterests().isEmpty()) {
-
-            StringBuilder interets = new StringBuilder();
-            for (final String interet : conference.getInterests()) {
-                if (interet != null) {
-                    if (interets.length() > 0) {
-                        interets.append(", ");
-                    }
-                    interets.append(interet);
-                }
-            }
-            TextView text = new TextViewTableBuilder()
-                    .buildView(getActivity())
-                    .addText(interets.toString())
-                    .addPadding(4, 10, 4)
-                    .addTextColor(getResources().getColor(R.color.black))
-                    .getView();
-            text.setSingleLine(false);
-            sessionLinkList.addView(text);
         }
     }
 
@@ -326,7 +329,7 @@ public class SessionDetailFragment extends Fragment {
      */
     private boolean isTalkFavorite() {
         SharedPreferences settings = getActivity().getSharedPreferences(UIUtils.PREFS_FAVORITES_NAME, 0);
-        return settings.getBoolean(String.valueOf(getArguments().getLong(UIUtils.ARG_ID)), false);
+        return settings.getBoolean(getArguments().getString(UIUtils.ARG_ID), false);
     }
 
     @Override
@@ -339,9 +342,9 @@ public class SessionDetailFragment extends Fragment {
 
     protected Toggle toggleFavorite() {
         //On recupere id
-        long id = getArguments().getLong(UIUtils.ARG_ID);
+        String id = getArguments().getString(UIUtils.ARG_ID);
         Toggle toggle = Toggle.NOTHING;
-        if (id > 0) {
+        if (id != null) {
             //On sauvegarde le choix de l'utilsateur
             SharedPreferences settings = getActivity().getSharedPreferences(UIUtils.PREFS_FAVORITES_NAME, 0);
             SharedPreferences.Editor editor = settings.edit();

@@ -58,7 +58,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
- * Activity permettant d'afficher les informations sur une personne participant à Mix-IT
+ * Activity permettant d'afficher les informations sur une personne participant à MiXiT
  */
 public class PeopleDetailFragment extends Fragment {
 
@@ -80,11 +80,11 @@ public class PeopleDetailFragment extends Fragment {
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static PeopleDetailFragment newInstance(String typeAppel, Long message, int sectionNumber) {
+    public static PeopleDetailFragment newInstance(String typeAppel, String id, int sectionNumber) {
         PeopleDetailFragment fragment = new PeopleDetailFragment();
         Bundle args = new Bundle();
         args.putString(UIUtils.ARG_LIST_TYPE, typeAppel);
-        args.putLong(UIUtils.ARG_ID, message);
+        args.putString(UIUtils.ARG_ID, id);
         args.putInt(UIUtils.ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
@@ -98,13 +98,11 @@ public class PeopleDetailFragment extends Fragment {
         this.membreUserName = (TextView) rootView.findViewById(R.id.membre_user_name);
         this.titleSessions = (TextView) rootView.findViewById(R.id.titleSessions);
         this.titleLinks = (TextView) rootView.findViewById(R.id.titleLinks);
-        this.titleInterets = (TextView) rootView.findViewById(R.id.titleInterets);
         this.personDesciptif = (TextView) rootView.findViewById(R.id.membre_desciptif);
         this.personShortDesciptif = (TextView) rootView.findViewById(R.id.membre_shortdesciptif);
         this.membreEntreprise = (TextView) rootView.findViewById(R.id.membre_entreprise);
         this.profileImage = (ImageView) rootView.findViewById(R.id.membre_image);
         this.logoImage = (ImageView) rootView.findViewById(R.id.membre_logo);
-        this.interestLayout = (LinearLayout) rootView.findViewById(R.id.personInteretFragment);
         this.linkLayout = (LinearLayout) rootView.findViewById(R.id.personLinkFragment);
         this.sessionLayout = (LinearLayout) rootView.findViewById(R.id.personSessionFragment);
         return rootView;
@@ -115,7 +113,7 @@ public class PeopleDetailFragment extends Fragment {
         super.onAttach(activity);
         ((HomeActivity) activity).onSectionAttached(
                 "title_detail_" + getArguments().getString(UIUtils.ARG_LIST_TYPE),
-                "color_" + getArguments().getString(UIUtils.ARG_LIST_TYPE));
+                "color_primary");
     }
 
     @Override
@@ -135,7 +133,7 @@ public class PeopleDetailFragment extends Fragment {
         Context context = getActivity().getBaseContext();
 
         //On commence par recuperer le Membre que l'on sohaite afficher
-        Long id = getArguments().getLong(UIUtils.ARG_ID);
+        String id = getArguments().getString(UIUtils.ARG_ID);
         Member membre = MembreFacade.getInstance().getMembre(context, getArguments().getString(UIUtils.ARG_LIST_TYPE), id);
         if (membre == null) {
             membre = MembreFacade.getInstance().getMembre(context, TypeFile.members.name(), id);
@@ -144,7 +142,6 @@ public class PeopleDetailFragment extends Fragment {
         addPeopleInfo(membre);
         addPeopleLink(membre);
         addPeopleSession(membre);
-        addPeopleInterrest(membre);
     }
 
     private void addPeopleInfo(Member membre) {
@@ -268,7 +265,7 @@ public class PeopleDetailFragment extends Fragment {
                         horaire.setText(getResources().getString(R.string.pasdate));
 
                     }
-                    if (conf.getLang() != null && "en".equals(conf.getLang())) {
+                    if (conf.getLang() != null && "ENGLISH".equals(conf.getLang())) {
                         langImage.setImageDrawable(getResources().getDrawable(R.drawable.en));
                     } else {
                         langImage.setImageDrawable(getResources().getDrawable(R.drawable.fr));
@@ -338,35 +335,6 @@ public class PeopleDetailFragment extends Fragment {
         }
     }
 
-    private void addPeopleInterrest(Member membre) {
-        //On vide les éléments
-        interestLayout.removeAllViews();
-
-        //On affiche les liens que si on a recuperer des choses
-        if (membre != null && membre.getInterests() != null && !membre.getInterests().isEmpty()) {
-
-            StringBuilder interets = new StringBuilder();
-            for (final String interet : membre.getInterests()) {
-                if (interet != null) {
-                    if (interets.length() > 0) {
-                        interets.append(", ");
-                    }
-                    interets.append(interet);
-                }
-            }
-            TextView text = new TextViewTableBuilder()
-                    .buildView(getActivity())
-                    .addText(interets.toString())
-                    .addPadding(4, 10, 4)
-                    .addTextColor(getResources().getColor(R.color.black))
-                    .getView();
-            text.setSingleLine(false);
-            interestLayout.addView(text);
-        } else {
-            titleInterets.getLayoutParams().height = 0;
-        }
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (isPeopleMemberFragment()) {
@@ -375,33 +343,33 @@ public class PeopleDetailFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_profile) {
-            final Long idMembre = getArguments().getLong(UIUtils.ARG_ID);
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage(getString(R.string.description_link_user))
-                    .setPositiveButton(R.string.dial_oui, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            //On recupere les favoris existant si on le demande
-                            SharedPreferences settings = getActivity().getSharedPreferences(UIUtils.PREFS_TEMP_NAME, 0);
-                            SharedPreferences.Editor editor = settings.edit();
-                            editor.putLong("idMemberForFavorite", idMembre);
-                            editor.commit();
-                            ((HomeActivity) getActivity()).appelerSynchronizer(HomeActivity.TypeAppel.FAVORITE, idMembre);
-                        }
-                    })
-                    .setNeutralButton(R.string.dial_cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            //On ne fait rien
-                        }
-                    });
-            builder.create();
-            builder.show();
-
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        if (item.getItemId() == R.id.menu_profile) {
+//            final String login = getArguments().getString(UIUtils.ARG_ID);
+//            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//            builder.setMessage(getString(R.string.description_link_user))
+//                    .setPositiveButton(R.string.dial_oui, new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface dialog, int id) {
+//                            //On recupere les favoris existant si on le demande
+//                            SharedPreferences settings = getActivity().getSharedPreferences(UIUtils.PREFS_TEMP_NAME, 0);
+//                            SharedPreferences.Editor editor = settings.edit();
+//                            editor.putString("idMemberForFavorite", login);
+//                            editor.commit();
+//                            ((HomeActivity) getActivity()).appelerSynchronizer(HomeActivity.TypeAppel.FAVORITE);
+//                        }
+//                    })
+//                    .setNeutralButton(R.string.dial_cancel, new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface dialog, int id) {
+//                            //On ne fait rien
+//                        }
+//                    });
+//            builder.create();
+//            builder.show();
+//
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
 
     public boolean isPeopleMemberFragment() {

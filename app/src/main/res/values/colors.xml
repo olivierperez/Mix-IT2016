@@ -15,7 +15,9 @@
 -->
 <resources>
 
-    <color name="color_home">#37474F</color>
+    <color name="color_primary">#2c233d</color>
+
+    <color name="color_home">#2c233d</color>
     <color name="color_planning">#E91E63</color>
 
     <color name="color_speaker">#0097a7</color>

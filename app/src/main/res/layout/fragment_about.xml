@@ -18,7 +18,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/aboutLayout"
-                android:padding="8dp">
+                android:padding="8dp"
+                android:background="@color/color_primary">
 
     <ImageView
             android:id="@+id/imageView1"
@@ -37,7 +38,7 @@
             android:paddingLeft="2dp"
             android:paddingTop="4dp"
             android:layout_below="@+id/imageView1"
-            style="@style/myTextView"
+            style="@style/myTextViewInverse"
             android:text="@string/about_h1"
             android:id="@+id/about_h1"/>
 
@@ -45,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="2dp"
-            style="@style/myTextView"
+            style="@style/myTextViewInverse"
             android:layout_below="@+id/about_h1"
             android:text="@string/about_cree"
             
@@ -56,10 +57,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="2dp"
-            style="@style/myTextView"
+            style="@style/myTextViewInverse"
             android:layout_below="@+id/about_cree"
             android:text="@string/about_blog"
-        android:autoLink="web"
+            android:autoLink="web"
+            android:textColorLink="@color/white"
             android:id="@+id/about_blog"/>
 
     <TextView
@@ -69,7 +71,7 @@
             android:paddingBottom="5dp"
             android:paddingLeft="2dp"
             android:layout_below="@+id/about_blog"
-            style="@style/myTextView"
+            style="@style/myTextViewInverse"
             
             android:text="@string/about_help"/>
 </RelativeLayout>

@@ -15,16 +15,6 @@
  */
 package com.ehret.mixit.domain.twitter;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
-
-import com.ehret.mixit.R;
-
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
 import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
@@ -33,13 +23,21 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
+import com.ehret.mixit.R;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 /**
  * Classe modelisant un tweet
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Tweet {
-    private String created_at = "Thu, 21 Apr 2016 20:16:34 +0000";
+    private String created_at = "Thu, 21 Apr 2017 20:16:34 +0000";
 
     private String from_user;
     private long from_user_id;
@@ -200,7 +198,7 @@ public class Tweet {
                 URL url = new URL(profile_image_url);
                 imageToDisplay = BitmapFactory.decodeStream(url.openConnection().getInputStream());
             } catch (IOException e) {
-                Log.w("Erreur lors de la recuperation de l'image " + this.profile_image_url, e);
+                Log.w(this.profile_image_url, e);
             }
         }
     }
