@@ -53,6 +53,7 @@ import com.ehret.mixit.utils.FileUtils;
 import com.ehret.mixit.utils.UIUtils;
 import com.github.rjeschke.txtmark.Processor;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -172,10 +173,15 @@ public class PeopleDetailFragment extends Fragment {
             //Recuperation de l'mage liee au profil
             image = FileUtils.getImageProfile(context, membre);
             if (image == null) {
-                profileImage.setImageDrawable(context.getResources().getDrawable(R.drawable.person_image_empty));
+                profileImage.setImageResource(R.drawable.person_image_empty);
             }
         }
-        if (image != null) {
+        if(membre.getExtension()!=null && membre.getExtension().equals("svg")){
+            profileImage.setAdjustViewBounds(true);
+            profileImage.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+            profileImage.setImageDrawable(FileUtils.getImageSvg(context, membre));
+        }
+        else if (image != null) {
             profileImage.setImageBitmap(image);
         }
     }

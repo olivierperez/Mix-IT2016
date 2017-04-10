@@ -84,13 +84,13 @@ public class Synchronizer {
     /**
      * Telechargement d'une image
      */
-    public static void downloadImage(Context context, String mURL, String ofile) {
+    public static void downloadImage(Context context, String mURL, String ofile, String ext) {
         InputStream in = null;
         FileOutputStream out = null;
         URLConnection urlConn;
         try {
             //Emplacement final
-            File emplacement = new File(context.getExternalFilesDir(Environment.DIRECTORY_DCIM), ofile + ".jpg");
+            File emplacement = new File(context.getExternalFilesDir(Environment.DIRECTORY_DCIM), ofile + "." + ext);
             if (emplacement.exists()) {
                 emplacement.delete();
             }

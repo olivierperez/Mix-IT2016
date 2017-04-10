@@ -96,7 +96,13 @@ public class ListMemberAdapter extends BaseAdapter {
                 holder.profile_image.setImageDrawable(context.getResources().getDrawable(R.drawable.person_image_empty));
             }
         }
-        if(image!=null){
+
+        if(person.getExtension()!=null && person.getExtension().equals("svg")){
+            holder.profile_image.setAdjustViewBounds(true);
+            holder.profile_image.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+            holder.profile_image.setImageDrawable(FileUtils.getImageSvg(context, person));
+        }
+        else if(image!=null){
             holder.profile_image.setImageBitmap(image);
         }
 

@@ -17,6 +17,7 @@ public class Member {
     private String lastname;
     private String company;
     private String logo;
+    private String extension;
     private String hash;
     private String shortDescription;
     private String longDescription;
@@ -42,6 +43,18 @@ public class Member {
     public Member setLogo(String logo) {
         this.logo = logo;
         return this;
+    }
+
+    public String getExtension() {
+        if(this.logo != null){
+            try {
+                return this.logo.substring(this.logo.lastIndexOf(".") + 1);
+            }
+            catch (RuntimeException e){
+                return "jpg";
+            }
+        }
+        return "jpg";
     }
 
     public String getUrlImage() {

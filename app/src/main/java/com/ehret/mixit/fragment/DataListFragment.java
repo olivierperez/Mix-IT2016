@@ -164,13 +164,13 @@ public class DataListFragment extends Fragment {
 
         switch (TypeFile.getTypeFile(getArguments().getString(UIUtils.ARG_LIST_TYPE))) {
             case workshops:
-                liste.setAdapter(new ListTalkAdapter(context, ConferenceFacade.getInstance().getWorkshops(context, filter)));
+                liste.setAdapter(new ListTalkAdapter(context, ConferenceFacade.getInstance().getWorkshops(context, filter), TypeFile.workshops));
                 break;
             case talks:
-                liste.setAdapter(new ListTalkAdapter(context, ConferenceFacade.getInstance().getTalks(context, filter)));
+                liste.setAdapter(new ListTalkAdapter(context, ConferenceFacade.getInstance().getTalks(context, filter), TypeFile.talks));
                 break;
             default:
-                liste.setAdapter(new ListTalkAdapter(context, ConferenceFacade.getInstance().getFavorites(context, filter)));
+                liste.setAdapter(new ListTalkAdapter(context, ConferenceFacade.getInstance().getFavorites(context, filter), TypeFile.favorites));
 
         }
     }

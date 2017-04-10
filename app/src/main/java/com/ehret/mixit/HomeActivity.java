@@ -366,21 +366,21 @@ public class HomeActivity extends ActionBarActivity
             //L'action d'après consiste à charger les images
             for (Member membre : membres) {
                 if (membre.getUrlImage() != null && membre.isSpeaker()) {
-                    Synchronizer.downloadImage(getBaseContext(), membre.getUrlImage(), "membre" + membre.getLogin());
+                    Synchronizer.downloadImage(getBaseContext(), membre.getUrlImage(), "membre" + membre.getLogin(), membre.getExtension());
                     publishProgress(progressStatus++);
                 }
             }
             //L'action d'après consiste à charger les images
             for (Member membre : MembreFacade.getInstance().getMembres(getBaseContext(), TypeFile.staff.name(), null)) {
                 if (membre.getUrlImage() != null) {
-                    Synchronizer.downloadImage(getBaseContext(), membre.getUrlImage(), "membre" + membre.getLogin());
+                    Synchronizer.downloadImage(getBaseContext(), membre.getUrlImage(), "membre" + membre.getLogin(), membre.getExtension());
                     publishProgress(progressStatus++);
                 }
             }
             //Pour les sponsors on s'interesse au logo
             for (Member membre : MembreFacade.getInstance().getMembres(getBaseContext(), TypeFile.sponsor.name(), null)) {
                 if (membre.getLogo() != null && membre.isSponsor()) {
-                    Synchronizer.downloadImage(getBaseContext(), membre.getUrlImage(), "membre" + membre.getLogin());
+                    Synchronizer.downloadImage(getBaseContext(), membre.getUrlImage(), "membre" + membre.getLogin(), membre.getExtension());
                     publishProgress(progressStatus++);
                 }
             }

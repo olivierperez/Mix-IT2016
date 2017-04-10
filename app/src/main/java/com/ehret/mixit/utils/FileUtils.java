@@ -18,8 +18,15 @@ package com.ehret.mixit.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.DrawFilter;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.PictureDrawable;
 import android.os.Environment;
 
+import com.caverock.androidsvg.PreserveAspectRatio;
+import com.caverock.androidsvg.SVG;
+import com.caverock.androidsvg.SVGParseException;
+import com.caverock.androidsvg.SVGParser;
 import com.ehret.mixit.R;
 import com.ehret.mixit.domain.JsonFile;
 import com.ehret.mixit.domain.TypeFile;
@@ -85,11 +92,30 @@ public class FileUtils {
 
     }
 
+    public static Drawable getImageSvg(Context context, Member membre) {
+        if (membre == null)
+            return null;
+        if (membre.getUrlImage() != null) {
+            File myFile = new File(context.getExternalFilesDir(Environment.DIRECTORY_DCIM), "membre" + membre.getLogin() + "." + membre.getExtension());
+            if (myFile.exists()) {
+                try {
+                    SVG svg = SVG.getFromInputStream(new FileInputStream(myFile));
+                    return new PictureDrawable(svg.renderToPicture());
+                } catch (IOException e) {
+                    return null;
+                }
+                catch (SVGParseException e) {
+                    return null;
+                }
+            }
+        }
+        return null;
+    }
     public static Bitmap getImageProfile(Context context, Member membre) {
         if (membre == null)
             return null;
         if (membre.getUrlImage() != null) {
-            File myFile = new File(context.getExternalFilesDir(Environment.DIRECTORY_DCIM), "membre" + membre.getLogin() + ".jpg");
+            File myFile = new File(context.getExternalFilesDir(Environment.DIRECTORY_DCIM), "membre" + membre.getLogin() + "." + membre.getExtension());
             if (myFile.exists()) {
                 try {
                     return BitmapFactory.decodeStream(new FileInputStream(myFile));
@@ -105,9 +131,12 @@ public class FileUtils {
 
     public static Bitmap getImageLogo(Context context, Member membre) {
         if (membre.getLogo() != null) {
-            File myFile = new File(context.getExternalFilesDir(Environment.DIRECTORY_DCIM), "logo" + membre.getLogin() + ".jpg");
+            File myFile = new File(context.getExternalFilesDir(Environment.DIRECTORY_DCIM), "logo" + membre.getLogin() + "." + membre.getExtension());
             if (myFile.exists()) {
                 try {
+                    if(membre.getExtension().equals("svg")){
+                        return BitmapFactory.decodeStream(new FileInputStream(myFile));
+                    }
                     return BitmapFactory.decodeStream(new FileInputStream(myFile));
                 } catch (IOException e) {
                     return null;

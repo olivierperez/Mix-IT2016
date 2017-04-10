@@ -25,8 +25,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import android.widget.Toast;
 import com.ehret.mixit.R;
 import com.ehret.mixit.domain.Salle;
+import com.ehret.mixit.domain.TypeFile;
 import com.ehret.mixit.domain.talk.Talk;
 import com.ehret.mixit.utils.UIUtils;
 
@@ -41,10 +43,15 @@ public class ListTalkAdapter extends BaseAdapter {
     
     private List<Talk> datas;
     private Context context;
+    private TypeFile typeFile;
 
-    public ListTalkAdapter(Context context, List<Talk> datas) {
+    public ListTalkAdapter(Context context, List<Talk> datas, TypeFile typeFile) {
         this.datas = datas;
         this.context = context;
+        this.typeFile = typeFile;
+        if(datas.isEmpty() && typeFile == TypeFile.favorites){
+            Toast.makeText(context, "Aucun favori pour le moment. Pour en ajouter, allez sur un talk et cliquez sur une étoile", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
