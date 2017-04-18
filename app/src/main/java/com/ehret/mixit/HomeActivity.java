@@ -86,7 +86,7 @@ public class HomeActivity extends ActionBarActivity
         //Save the fragment's instance
 
         for (Fragment fragment : getSupportFragmentManager().getFragments()) {
-            if (fragment.equals(mContent)) {
+            if (fragment != null && fragment.equals(mContent)) {
                 getSupportFragmentManager().putFragment(outState, "mContent", mContent);
                 break;
             }
