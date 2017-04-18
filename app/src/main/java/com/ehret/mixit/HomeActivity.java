@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -48,6 +49,7 @@ public class HomeActivity extends ActionBarActivity
     public static final String ARG_SECTION_NUMBER = "section_number";
     private Fragment mContent;
     private ProgressDialog progressDialog;
+    private DrawerLayout drawerLayout;
     protected int progressStatus = 0;
 
     /**
@@ -77,10 +79,11 @@ public class HomeActivity extends ActionBarActivity
         NavigationDrawerFragment mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
-        // Set up the drawer    .
+        // Set up the drawer
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
+                drawerLayout);
     }
 
     @Override
@@ -176,7 +179,9 @@ public class HomeActivity extends ActionBarActivity
      */
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
             boolean home = false;
             for (Fragment fragment : getSupportFragmentManager().getFragments()) {
                 if (fragment instanceof HomeFragment) {
@@ -185,12 +190,10 @@ public class HomeActivity extends ActionBarActivity
             }
             if(home){
                 super.onBackPressed();
-            }
-            else{
+            } else{
                 changeCurrentFragment(new HomeFragment(), null);
             }
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }
