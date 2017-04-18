@@ -389,10 +389,6 @@ public class ConferenceFacade {
         return getTalkAndWorkshops(context).get(key);
     }
 
-    public Talk getWorkshop(Context context, String key) {
-        return getTalkAndWorkshops(context).get(key);
-    }
-
     /**
      * Filtre la liste des talks ou des workshops
      */
@@ -503,5 +499,7 @@ public class ConferenceFacade {
         return sessions;
     }
 
-
+    public Talk getSpecial(Context context, String id) {
+        return getEventsSpeciaux(context).get(id);
+    }
 }

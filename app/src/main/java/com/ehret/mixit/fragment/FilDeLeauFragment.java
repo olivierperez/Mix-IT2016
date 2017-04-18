@@ -52,11 +52,13 @@ public class FilDeLeauFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Talk conf = (Talk) liste.getItemAtPosition(position);
 
-                if("WORKSHOP".equals(conf.getFormat())){
+                if("Special".equals(conf.getFormat())){
+                    ((HomeActivity) getActivity()).changeCurrentFragment(
+                            SessionDetailFragment.newInstance(TypeFile.special.toString(), conf.getIdSession(),-1), TypeFile.special.toString());
+                } else if("WORKSHOP".equals(conf.getFormat())){
                     ((HomeActivity) getActivity()).changeCurrentFragment(
                             SessionDetailFragment.newInstance(TypeFile.workshops.toString(), conf.getIdSession(),4), TypeFile.workshops.toString());
-                }
-                else {
+                } else {
                     ((HomeActivity) getActivity()).changeCurrentFragment(
                             SessionDetailFragment.newInstance(TypeFile.talks.toString(), conf.getIdSession(),3), TypeFile.talks.toString());
                 }

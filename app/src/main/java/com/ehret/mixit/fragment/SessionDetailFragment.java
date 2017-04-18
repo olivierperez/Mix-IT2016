@@ -72,6 +72,8 @@ public class SessionDetailFragment extends Fragment {
     private ImageView imageFavorite;
     private ImageView imageTrack;
     private ImageView langImage;
+    private View talkView;
+    private TextView speakersTitle;
     private LinearLayout sessionPersonList;
     private LayoutInflater mInflater;
     private HtmlTagHandler htmlTagHandler = new HtmlTagHandler();
@@ -104,6 +106,8 @@ public class SessionDetailFragment extends Fragment {
         this.summary = (TextView) rootView.findViewById(R.id.talk_summary);
         this.descriptif = (TextView) rootView.findViewById(R.id.talk_desciptif);
         this.salle = (TextView) rootView.findViewById(R.id.talk_salle);
+        this.talkView = rootView.findViewById(R.id.talkView);
+        this.speakersTitle = (TextView) rootView.findViewById(R.id.speakersTitle);
         this.sessionPersonList = (LinearLayout) rootView.findViewById(R.id.sessionPersonList);
         this.langImage = (ImageView) rootView.findViewById(R.id.talk_image_language);
         this.track = (TextView) rootView.findViewById(R.id.talk_track);
@@ -148,17 +152,25 @@ public class SessionDetailFragment extends Fragment {
 
         //On commence par recuperer le Membre que l'on sohaite afficher
         String id = getArguments().getString(UIUtils.ARG_ID);
-        String type = getArguments().getString(UIUtils.ARG_LIST_TYPE);
+        String typeStr = getArguments().getString(UIUtils.ARG_LIST_TYPE);
+        TypeFile type = TypeFile.getTypeFile(typeStr);
 
         Talk conference;
-        if (TypeFile.workshops.name().equals(type)) {
-            conference = ConferenceFacade.getInstance().getTalk(context, id);
+        if (type == TypeFile.special) {
+            conference = ConferenceFacade.getInstance().getSpecial(context, id);
+            addGeneralInfo(conference);
+            hideSpeakerInfo();
         } else {
             conference = ConferenceFacade.getInstance().getTalk(context, id);
+            addGeneralInfo(conference);
+            addSpeakerInfo(conference);
         }
 
-        addGeneralInfo(conference);
-        addSpeakerInfo(conference);
+    }
+
+    private void hideSpeakerInfo() {
+        talkView.setVisibility(View.GONE);
+        speakersTitle.setVisibility(View.GONE);
     }
 
     private void addGeneralInfo(Talk conference) {
