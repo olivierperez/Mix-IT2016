@@ -158,7 +158,7 @@ public class Talk {
 
         Talk talk = (Talk) o;
 
-        return idSession == talk.idSession;
+        return Objects.equals(idSession, talk.idSession);
     }
 
     @Override
