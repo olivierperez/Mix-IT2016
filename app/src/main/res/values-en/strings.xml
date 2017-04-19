@@ -88,7 +88,7 @@
     <string name="title_section_workshop">Workshops</string>
     <string name="title_workshops">Workshops</string>
     <string name="whats_on_thank_you_title">See you next year</string>
-    <string name="whats_on_countdown_title_0"> </string>
+    <string name="whats_on_countdown_title_0">Remaining %s</string>
     <plurals name="whats_on_countdown_title">
         <item quantity="one"><xliff:g id="number_of_days">%1$s</xliff:g> day, <xliff:g id="remaining_time">%2$s</xliff:g>\nbefore MiXiT 2017</item>
         <item quantity="other"><xliff:g id="number_of_days">%1$s</xliff:g> days, <xliff:g id="remaining_time">%2$s</xliff:g>\nbefore MiXiT 2017</item>

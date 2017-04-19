@@ -100,11 +100,7 @@ public class HomeFragment extends Fragment {
             if (conferenceStarted) {
                 // Conference started while in countdown mode, switch modes and
                 // bail on future countdown updates.
-                mHandler.postDelayed(new Runnable() {
-                    public void run() {
-                        refresh();
-                    }
-                }, 100);
+                mHandler.postDelayed(() -> refresh(), 100);
                 return;
             }
 

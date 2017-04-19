@@ -46,7 +46,7 @@
     <string name="mixit_url" translatable="false">https://mixitconf.org/come</string>
     <string name="hastag" translatable="false">#mixit17</string>
     <!-- Compteur -->
-    <string name="whats_on_countdown_title_0">Plus que </string>
+    <string name="whats_on_countdown_title_0">Plus que %s</string>
     <plurals name="whats_on_countdown_title">
         <item quantity="one"><xliff:g id="number_of_days">%1$s</xliff:g> jours, <xliff:g id="remaining_time">%2$s</xliff:g>\navant de nous retrouver à MiXiT</item>
         <item quantity="other"><xliff:g id="number_of_days">%1$s</xliff:g> jours, <xliff:g id="remaining_time">%2$s</xliff:g>\navant de nous retrouver à MiXiT</item>
