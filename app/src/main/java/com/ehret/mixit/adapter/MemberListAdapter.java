@@ -1,8 +1,8 @@
 package com.ehret.mixit.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.support.v4.content.ContextCompat;
+import android.graphics.drawable.Drawable;
+import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -15,7 +15,9 @@ import com.ehret.mixit.R;
 import com.ehret.mixit.domain.people.Member;
 import com.ehret.mixit.utils.FileUtils;
 import com.github.rjeschke.txtmark.Processor;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -75,27 +77,34 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Me
                 descriptif.setText(Html.fromHtml(Processor.process(member.getShortDescription().trim())).toString().replaceAll("\n", ""));
             }
 
-            Bitmap image = null;
+            File sponsorImage = new File(context.getExternalFilesDir(Environment.DIRECTORY_DCIM), "logo" + member.getLogin() + "."  + member.getExtension());
+            File profileImage = new File(context.getExternalFilesDir(Environment.DIRECTORY_DCIM), "membre" + member.getLogin() + "." + member.getExtension());
 
             // Si on est un sponsor on affiche le logo
-            if (member.getLogo() != null && member.getLogo().length() > 0) {
-                image = FileUtils.getImageLogo(context, member);
-            }
-
-            if (image == null) {
-                // Recuperation de l'image liee au profil
-                image = FileUtils.getImageProfile(context, member);
-                if (image == null) {
-                    profile_image.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.person_image_empty));
-                }
-            }
-
-            if (member.getExtension() != null && member.getExtension().equals("svg")) {
+            if ("svg".equals(member.getExtension())) {
                 profile_image.setAdjustViewBounds(true);
                 profile_image.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                profile_image.setImageDrawable(FileUtils.getImageSvg(context, member));
-            } else if (image != null) {
-                profile_image.setImageBitmap(image);
+                Drawable imageSvg = FileUtils.getImageSvg(context, member);
+                if (imageSvg != null) {
+                    profile_image.setImageDrawable(imageSvg);
+                } else {
+                    profile_image.setImageResource(R.drawable.person_image_empty);
+                }
+            } else if (member.getLogo() != null && !member.getLogo().isEmpty() && sponsorImage.exists()) {
+                Picasso
+                        .with(context)
+                        .load(sponsorImage)
+                        .resizeDimen(R.dimen.speaker_image_size, R.dimen.speaker_image_size)
+                        .placeholder(R.drawable.person_image_empty)
+                        .into(profile_image);
+            } else {
+                // Recuperation de l'image liee au profil
+                Picasso
+                        .with(context)
+                        .load(profileImage)
+                        .resizeDimen(R.dimen.speaker_image_size, R.dimen.speaker_image_size)
+                        .placeholder(R.drawable.person_image_empty)
+                        .into(profile_image);
             }
 
         }

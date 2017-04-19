@@ -78,5 +78,6 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.7'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.8.7'
     compile 'com.caverock:androidsvg:1.2.1'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }
 

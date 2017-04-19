@@ -18,15 +18,12 @@ package com.ehret.mixit.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.DrawFilter;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PictureDrawable;
 import android.os.Environment;
 
-import com.caverock.androidsvg.PreserveAspectRatio;
 import com.caverock.androidsvg.SVG;
 import com.caverock.androidsvg.SVGParseException;
-import com.caverock.androidsvg.SVGParser;
 import com.ehret.mixit.R;
 import com.ehret.mixit.domain.JsonFile;
 import com.ehret.mixit.domain.TypeFile;
@@ -103,8 +100,7 @@ public class FileUtils {
                     return new PictureDrawable(svg.renderToPicture());
                 } catch (IOException e) {
                     return null;
-                }
-                catch (SVGParseException e) {
+                } catch (SVGParseException e) {
                     return null;
                 }
             }
