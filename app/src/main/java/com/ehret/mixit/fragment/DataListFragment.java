@@ -1,6 +1,7 @@
 package com.ehret.mixit.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,7 @@ import com.ehret.mixit.model.MembreFacade;
 import com.ehret.mixit.utils.UIUtils;
 
 import java.util.List;
+import java.util.Set;
 
 public class DataListFragment extends Fragment {
 
@@ -145,14 +147,17 @@ public class DataListFragment extends Fragment {
         String filter = getArguments().getString(UIUtils.ARG_LIST_FILTER);
         TypeFile typeFile = TypeFile.getTypeFile(getArguments().getString(UIUtils.ARG_LIST_TYPE));
 
+        SharedPreferences settings = context.getSharedPreferences(UIUtils.PREFS_FAVORITES_NAME, 0);
+        Set<String> favorites = settings.getAll().keySet();
 
-        DataListAdapter adapter = new DataListAdapter(talk ->
-                ((HomeActivity) getActivity()).changeCurrentFragment(
-                        SessionDetailFragment.newInstance(
-                                getArguments().getString(UIUtils.ARG_LIST_TYPE),
-                                talk.getIdSession(),
-                                getArguments().getInt(UIUtils.ARG_SECTION_NUMBER)),
-                        getArguments().getString(UIUtils.ARG_LIST_TYPE)));
+        DataListAdapter adapter = new DataListAdapter(favorites,
+                talk ->
+                        ((HomeActivity) getActivity()).changeCurrentFragment(
+                                SessionDetailFragment.newInstance(
+                                        getArguments().getString(UIUtils.ARG_LIST_TYPE),
+                                        talk.getIdSession(),
+                                        getArguments().getInt(UIUtils.ARG_SECTION_NUMBER)),
+                                getArguments().getString(UIUtils.ARG_LIST_TYPE)));
         recyclerView.setAdapter(adapter);
 
         if (typeFile != null) {
@@ -164,9 +169,9 @@ public class DataListFragment extends Fragment {
                     adapter.setItems(ConferenceFacade.getInstance().getTalks(context, filter));
                     break;
                 default:
-                    List<Talk> favorites = ConferenceFacade.getInstance().getFavorites(context, filter);
-                    if (favorites != null && !favorites.isEmpty()) {
-                        adapter.setItems(favorites);
+                    List<Talk> favTalks = ConferenceFacade.getInstance().getFavorites(context, filter);
+                    if (favTalks != null && !favTalks.isEmpty()) {
+                        adapter.setItems(favTalks);
                     } else {
                         Toast.makeText(context, "Aucun favori pour le moment. Pour en ajouter, allez sur un talk et cliquez sur une étoile.", Toast.LENGTH_LONG).show();
                     }

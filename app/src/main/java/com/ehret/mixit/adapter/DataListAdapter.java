@@ -1,7 +1,6 @@
 package com.ehret.mixit.adapter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -13,23 +12,25 @@ import android.widget.TextView;
 import com.ehret.mixit.R;
 import com.ehret.mixit.domain.Salle;
 import com.ehret.mixit.domain.talk.Talk;
-import com.ehret.mixit.utils.UIUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * @author Olivier Perez
  */
 public class DataListAdapter extends RecyclerView.Adapter<DataListAdapter.DataViewHolder> {
 
+    private final Set<String> favorites;
     private final OnTalkClickListener listener;
 
     private List<Talk> items;
 
-    public DataListAdapter(OnTalkClickListener listener) {
+    public DataListAdapter(Set<String> favorites, OnTalkClickListener listener) {
+        this.favorites = favorites;
         this.listener = listener;
     }
 
@@ -93,20 +94,20 @@ public class DataListAdapter extends RecyclerView.Adapter<DataListAdapter.DataVi
                 ));
             } else {
                 horaire.setText(context.getResources().getString(R.string.pasdate));
+            }
 
-            }
-            if (talk.getLang() != null && "ENGLISH".equals(talk.getLang())) {
-                langImage.setImageDrawable(context.getResources().getDrawable(R.drawable.en));
+            if ("ENGLISH".equals(talk.getLang())) {
+                langImage.setImageResource(R.drawable.en);
             } else {
-                langImage.setImageDrawable(context.getResources().getDrawable(R.drawable.fr));
+                langImage.setImageResource(R.drawable.fr);
             }
-            Salle salle;
+
             if (Salle.INCONNU != Salle.getSalle(talk.getRoom())) {
-                salle = Salle.getSalle(talk.getRoom());
+                Salle salle = Salle.getSalle(talk.getRoom());
                 if (context.getResources().getBoolean(R.bool.small_screen)) {
-                    talkSalle.setText(String.format(context.getResources().getString(R.string.Salle), salle.getTeenyName()));
+                    talkSalle.setText(context.getResources().getString(R.string.Salle, salle.getTeenyName()));
                 } else {
-                    talkSalle.setText(String.format(context.getResources().getString(R.string.Salle), salle.getNom()));
+                    talkSalle.setText(context.getResources().getString(R.string.Salle, salle.getNom()));
                 }
                 talkSalle.setBackgroundColor(context.getResources().getColor(salle.getColor()));
 
@@ -127,38 +128,30 @@ public class DataListAdapter extends RecyclerView.Adapter<DataListAdapter.DataVi
             if (talk.getTrack() != null) {
                 switch (talk.getTrack()) {
                     case "aliens":
-                        imageTrack.setImageDrawable(context.getResources().getDrawable(R.drawable.mxt_icon__aliens));
+                        imageTrack.setImageResource(R.drawable.mxt_icon__aliens);
                         break;
                     case "design":
-                        imageTrack.setImageDrawable(context.getResources().getDrawable(R.drawable.mxt_icon__design));
+                        imageTrack.setImageResource(R.drawable.mxt_icon__design);
                         break;
                     case "hacktivism":
-                        imageTrack.setImageDrawable(context.getResources().getDrawable(R.drawable.mxt_icon__hack));
+                        imageTrack.setImageResource(R.drawable.mxt_icon__hack);
                         break;
                     case "tech":
-                        imageTrack.setImageDrawable(context.getResources().getDrawable(R.drawable.mxt_icon__tech));
+                        imageTrack.setImageResource(R.drawable.mxt_icon__tech);
                         break;
                     case "learn":
-                        imageTrack.setImageDrawable(context.getResources().getDrawable(R.drawable.mxt_icon__learn));
+                        imageTrack.setImageResource(R.drawable.mxt_icon__learn);
                         break;
                     case "makers":
-                        imageTrack.setImageDrawable(context.getResources().getDrawable(R.drawable.mxt_icon__makers));
+                        imageTrack.setImageResource(R.drawable.mxt_icon__makers);
                         break;
                 }
             }
-            //On regarde si la conf fait partie des favoris
-            SharedPreferences settings = context.getSharedPreferences(UIUtils.PREFS_FAVORITES_NAME, 0);
-            boolean trouve = false;
-            for (String key : settings.getAll().keySet()) {
-                if (key.equals(String.valueOf(talk.getIdSession()))) {
-                    trouve = true;
-                    imageFavorite.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_important));
-                    break;
-                }
-            }
-            if (!trouve) {
-                imageFavorite.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_action_not_important));
-            }
+
+            // On regarde si la conf fait partie des favoris
+            imageFavorite.setImageResource(favorites.contains(talk.getIdSession())
+                    ? R.drawable.ic_action_important
+                    : R.drawable.ic_action_not_important);
         }
 
         public void listen(Talk talk) {
