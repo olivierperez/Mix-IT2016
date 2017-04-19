@@ -15,6 +15,9 @@
  */
 package com.ehret.mixit.domain;
 
+import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
+
 import com.ehret.mixit.R;
 
 /**
@@ -25,29 +28,31 @@ import com.ehret.mixit.R;
  * To change this template use File | Settings | File Templates.
  */
 public enum Salle {
-    SALLE1("Gosling", R.color.salle1, R.drawable.salle1_background,1, "Gos.","ROOM1"),
-    SALLE2("Eich", R.color.salle2, R.drawable.salle2_background,1, "Eich","ROOM2"),
-    SALLE3("Nonaka", R.color.salle3, R.drawable.salle3_background,1,"Non.","ROOM3"),
-    SALLE4("Dijkstra", R.color.salle4, R.drawable.salle4_background,1,"Dij.","ROOM4"),
-    SALLE5("Turing", R.color.salle5, R.drawable.salle5_background,1, "Tur.","ROOM5"),
-    SALLE7("Amphi Lovelace", R.color.salle7, R.drawable.salle7_background,0, "G.A.", "AMPHI1"),
-    SALLE8("Amphi Hamilton", R.color.salle8, R.drawable.salle8_background,0, "P.A.", "AMPHI2"),
-    SALLE9("Mezzanine", R.color.salle9, R.drawable.salle9_background,2, "Mez.", "ROOM7"),
-    INCONNU("Inconnue", R.color.grey, 0,0, "", "");
+    SALLE1("Gosling", R.color.salle1, R.drawable.salle1_background, 1, "Gos.", "ROOM1"),
+    SALLE2("Eich", R.color.salle2, R.drawable.salle2_background, 1, "Eich", "ROOM2"),
+    SALLE3("Nonaka", R.color.salle3, R.drawable.salle3_background, 1, "Non.", "ROOM3"),
+    SALLE4("Dijkstra", R.color.salle4, R.drawable.salle4_background, 1, "Dij.", "ROOM4"),
+    SALLE5("Turing", R.color.salle5, R.drawable.salle5_background, 1, "Tur.", "ROOM5"),
+    SALLE7("Amphi Lovelace", R.color.salle7, R.drawable.salle7_background, 0, "G.A.", "AMPHI1"),
+    SALLE8("Amphi Hamilton", R.color.salle8, R.drawable.salle8_background, 0, "P.A.", "AMPHI2"),
+    SALLE9("Mezzanine", R.color.salle9, R.drawable.salle9_background, 2, "Mez.", "ROOM7"),
+    INCONNU("Inconnue", R.color.grey, 0, 0, "", "");
 
     private String nom;
+    @ColorRes
     private int color;
+    @DrawableRes
     private int drawable;
     private int etage;
     private String suffix;
     private String remoteName;
 
-    private Salle(String nom, int color,int drawable, int etage, String suffix, String remoteName) {
+    Salle(String nom, int color, int drawable, int etage, String suffix, String remoteName) {
         this.nom = nom;
         this.color = color;
-        this.drawable=drawable;
-        this.etage=etage;
-        this.suffix=suffix;
+        this.drawable = drawable;
+        this.etage = etage;
+        this.suffix = suffix;
         this.remoteName = remoteName;
     }
 
@@ -59,12 +64,16 @@ public enum Salle {
         return remoteName;
     }
 
+    @ColorRes
     public int getColor() {
         return color;
     }
+
+    @DrawableRes
     public int getDrawable() {
         return drawable;
     }
+
     public static Salle getSalle(String nom) {
         if (nom != null) {
             for (Salle salle : values()) {
@@ -80,7 +89,7 @@ public enum Salle {
         return etage;
     }
 
-    public String getTeenyName(){
+    public String getTeenyName() {
         return suffix;
     }
 }

@@ -1,6 +1,7 @@
 package com.ehret.mixit.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,8 +18,10 @@ import com.ehret.mixit.adapter.FilAdapter;
 import com.ehret.mixit.domain.TypeFile;
 import com.ehret.mixit.domain.talk.Talk;
 import com.ehret.mixit.model.ConferenceFacade;
+import com.ehret.mixit.utils.UIUtils;
 
 import java.util.List;
+import java.util.Set;
 
 
 public class FilDeLeauFragment extends Fragment {
@@ -35,18 +38,22 @@ public class FilDeLeauFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        adapter = new FilAdapter(talk -> {
-            if ("Special".equals(talk.getFormat())) {
-                ((HomeActivity) getActivity()).changeCurrentFragment(
-                        SessionDetailFragment.newInstance(TypeFile.special.toString(), talk.getIdSession(), -1), TypeFile.special.toString());
-            } else if ("WORKSHOP".equals(talk.getFormat())) {
-                ((HomeActivity) getActivity()).changeCurrentFragment(
-                        SessionDetailFragment.newInstance(TypeFile.workshops.toString(), talk.getIdSession(), 4), TypeFile.workshops.toString());
-            } else {
-                ((HomeActivity) getActivity()).changeCurrentFragment(
-                        SessionDetailFragment.newInstance(TypeFile.talks.toString(), talk.getIdSession(), 3), TypeFile.talks.toString());
-            }
-        });
+
+        SharedPreferences settings = getContext().getSharedPreferences(UIUtils.PREFS_FAVORITES_NAME, 0);
+
+        adapter = new FilAdapter(settings.getAll().keySet(),
+                talk -> {
+                    if ("Special".equals(talk.getFormat())) {
+                        ((HomeActivity) getActivity()).changeCurrentFragment(
+                                SessionDetailFragment.newInstance(TypeFile.special.toString(), talk.getIdSession(), -1), TypeFile.special.toString());
+                    } else if ("WORKSHOP".equals(talk.getFormat())) {
+                        ((HomeActivity) getActivity()).changeCurrentFragment(
+                                SessionDetailFragment.newInstance(TypeFile.workshops.toString(), talk.getIdSession(), 4), TypeFile.workshops.toString());
+                    } else {
+                        ((HomeActivity) getActivity()).changeCurrentFragment(
+                                SessionDetailFragment.newInstance(TypeFile.talks.toString(), talk.getIdSession(), 3), TypeFile.talks.toString());
+                    }
+                });
 
         talksListView = (RecyclerView) view.findViewById(R.id.recyclerView);
         talksListView.setLayoutManager(new LinearLayoutManager(getContext()));
