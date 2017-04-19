@@ -130,6 +130,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+                android:id="@+id/talkView"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="8dp">
@@ -161,6 +162,7 @@
         </RelativeLayout>
         <TextView
             style="@style/myCalendarTitleh2"
+            android:id="@+id/speakersTitle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="2dp"
@@ -175,7 +177,7 @@
             android:baselineAligned="false"
             android:orientation="vertical"
             android:padding="5dp"
-            android:scrollbars="vertical"></LinearLayout>
+            android:scrollbars="vertical" />
 
     </LinearLayout>
 </ScrollView>

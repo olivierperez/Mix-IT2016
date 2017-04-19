@@ -1,7 +1,5 @@
 package com.ehret.mixit;
 
-import java.util.List;
-
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
@@ -16,6 +14,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -24,8 +23,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
 import android.widget.Toast;
+
 import com.ehret.mixit.domain.JsonFile;
-import com.ehret.mixit.domain.SendSocial;
 import com.ehret.mixit.domain.TypeFile;
 import com.ehret.mixit.domain.people.Member;
 import com.ehret.mixit.fragment.DataListFragment;
@@ -41,6 +40,8 @@ import com.ehret.mixit.model.Synchronizer;
 import com.ehret.mixit.utils.FileUtils;
 import com.ehret.mixit.utils.UIUtils;
 
+import java.util.List;
+
 
 public class HomeActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -48,12 +49,8 @@ public class HomeActivity extends ActionBarActivity
     public static final String ARG_SECTION_NUMBER = "section_number";
     private Fragment mContent;
     private ProgressDialog progressDialog;
+    private DrawerLayout drawerLayout;
     protected int progressStatus = 0;
-
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
-    private CharSequence mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,13 +71,13 @@ public class HomeActivity extends ActionBarActivity
             mContent = getSupportFragmentManager().getFragment(savedInstanceState, "mContent");
         }
 
-        NavigationDrawerFragment mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
 
-        // Set up the drawer    .
+        // Set up the drawer
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        NavigationDrawerFragment mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
+                drawerLayout);
     }
 
     @Override
@@ -89,7 +86,7 @@ public class HomeActivity extends ActionBarActivity
         //Save the fragment's instance
 
         for (Fragment fragment : getSupportFragmentManager().getFragments()) {
-            if (fragment.equals(mContent)) {
+            if (fragment != null && fragment.equals(mContent)) {
                 getSupportFragmentManager().putFragment(outState, "mContent", mContent);
                 break;
             }
@@ -176,7 +173,9 @@ public class HomeActivity extends ActionBarActivity
      */
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
             boolean home = false;
             for (Fragment fragment : getSupportFragmentManager().getFragments()) {
                 if (fragment instanceof HomeFragment) {
@@ -185,12 +184,10 @@ public class HomeActivity extends ActionBarActivity
             }
             if(home){
                 super.onBackPressed();
-            }
-            else{
+            } else{
                 changeCurrentFragment(new HomeFragment(), null);
             }
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }
@@ -199,27 +196,24 @@ public class HomeActivity extends ActionBarActivity
         int nbtitle = getResources().getIdentifier(title, "string", HomeActivity.this.getPackageName());
 
         if (nbtitle > 0) {
-            mTitle = getString(nbtitle > 0 ? nbtitle : R.string.title_section_home);
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().setBackgroundDrawable(
+            ActionBar actionBar = getSupportActionBar();
+
+            if (actionBar != null) {
+                actionBar.setTitle(getString(nbtitle));
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setHomeButtonEnabled(true);
+                actionBar.setHomeAsUpIndicator(nbtitle == R.string.title_section_home ? R.drawable.ic_menu : R.drawable.ic_drawer);
+                actionBar.setBackgroundDrawable(
                         new ColorDrawable(
                                 getResources().getColor(getResources().getIdentifier(color, "color", HomeActivity.this.getPackageName()))));
             }
         }
     }
 
-    public void restoreActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.home, menu);
-        restoreActionBar();
 
         //We have to know which fragment is used
         boolean found = false;

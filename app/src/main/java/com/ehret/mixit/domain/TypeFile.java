@@ -30,7 +30,8 @@ public enum TypeFile {
     user,
     sponsor,
     favorites,
-    interests;
+    interests,
+    special;
 
     public static TypeFile getTypeFile(String value) {
         for (TypeFile typeFile : values()) {

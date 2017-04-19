@@ -15,6 +15,27 @@
  */
 package com.ehret.mixit.model;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
+
+import com.ehret.mixit.R;
+import com.ehret.mixit.domain.TypeFile;
+import com.ehret.mixit.domain.dto.TalkDto;
+import com.ehret.mixit.domain.people.Member;
+import com.ehret.mixit.domain.talk.Favorite;
+import com.ehret.mixit.domain.talk.Speaker;
+import com.ehret.mixit.domain.talk.Talk;
+import com.ehret.mixit.utils.FileUtils;
+import com.ehret.mixit.utils.UIUtils;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Ordering;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -30,28 +51,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
-
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
-import android.util.LongSparseArray;
-import com.ehret.mixit.R;
-import com.ehret.mixit.domain.TypeFile;
-import com.ehret.mixit.domain.dto.TalkDto;
-import com.ehret.mixit.domain.people.Member;
-import com.ehret.mixit.domain.talk.Favorite;
-import com.ehret.mixit.domain.talk.Speaker;
-import com.ehret.mixit.domain.talk.Talk;
-import com.ehret.mixit.utils.FileUtils;
-import com.ehret.mixit.utils.UIUtils;
-import com.ehret.mixit.utils.Utils;
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Ordering;
 
 /**
  * Le but de ce fichier est de s'interfacer avec le fichier Json gerant les
@@ -195,11 +194,13 @@ public class ConferenceFacade {
      */
     public List<Talk> getWorkshopsAndTalks(Context context) {
         List<Talk> talks = new ArrayList<>();
-        talks.addAll(filtrerTalk(getTalkAndWorkshops(context), null, null));
+        talks.addAll(getTalkAndWorkshops(context).values());
         talks.addAll(getEventsSpeciaux(context).values());
         talks.addAll(getTimeMarkers(context));
 
-        return Ordering.from(getComparatorDate()).compound(getComparatorConference()).sortedCopy(talks);
+        return Ordering.from(getComparatorDate())
+                .compound(getComparatorConference())
+                .sortedCopy(talks);
     }
 
     /**
@@ -389,33 +390,27 @@ public class ConferenceFacade {
         return getTalkAndWorkshops(context).get(key);
     }
 
-    public Talk getWorkshop(Context context, String key) {
-        return getTalkAndWorkshops(context).get(key);
-    }
-
     /**
      * Filtre la liste des talks ou des workshops
      */
     private List<Talk> filtrerTalk(Map<String, Talk> talks, final TypeFile type, final String filtre) {
-        return FluentIterable.from(talks.values()).filter(new Predicate<Talk>() {
-            @Override
-            public boolean apply(Talk input) {
-                boolean retenu;
-                if (type == null) {
-                    retenu = true;
-                }
-                else if (type.equals(TypeFile.workshops)) {
-                    retenu = "WORKSHOP".equals(input.getFormat());
-                }
-                else {
-                    retenu = !"WORKSHOP".equals(input.getFormat());
-                }
-                return retenu &&
-                        ((filtre == null ||
-                                (input.getTitle() != null && input.getTitle().toLowerCase().contains(filtre.toLowerCase())) ||
-                                (input.getSummary() != null && input.getSummary().toLowerCase().contains(filtre.toLowerCase()))));
-            }
-        }).toList();
+        return FluentIterable
+                .from(talks.values())
+                .filter(input -> {
+                    boolean retenu;
+                    if (type == null) {
+                        retenu = true;
+                    } else if (type == TypeFile.workshops) {
+                        retenu = "WORKSHOP".equals(input.getFormat());
+                    } else {
+                        retenu = !"WORKSHOP".equals(input.getFormat());
+                    }
+                    return retenu &&
+                            (filtre == null ||
+                                    (input.getTitle() != null && input.getTitle().toLowerCase().contains(filtre.toLowerCase())) ||
+                                    (input.getSummary() != null && input.getSummary().toLowerCase().contains(filtre.toLowerCase())));
+                })
+                .toList();
     }
 
     /**
@@ -503,5 +498,7 @@ public class ConferenceFacade {
         return sessions;
     }
 
-
+    public Talk getSpecial(Context context, String id) {
+        return getEventsSpeciaux(context).get(id);
+    }
 }
