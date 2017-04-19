@@ -158,11 +158,11 @@ public class Talk {
 
         Talk talk = (Talk) o;
 
-        return Objects.equals(idSession, talk.idSession);
+        return idSession.equals(talk.idSession);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idSession);
+        return idSession.hashCode();
     }
 }
