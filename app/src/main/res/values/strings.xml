@@ -1,6 +1,4 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="app_name" translatable="false">MiXiT 2017</string>
-
     <string name="title_section_home" translatable="false">MiXiT 2017</string>
     <string name="title_section_planning" translatable="false">Planning</string>
     <string name="title_section_fildeleau">Le fil de l\'eau</string>
