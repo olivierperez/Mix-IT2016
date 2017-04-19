@@ -50,7 +50,6 @@ public class FilDeLeauFragment extends Fragment {
 
         talksListView = (RecyclerView) view.findViewById(R.id.recyclerView);
         talksListView.setLayoutManager(new LinearLayoutManager(getContext()));
-        talksListView.setAdapter(adapter);
     }
 
     @Override
@@ -90,6 +89,7 @@ public class FilDeLeauFragment extends Fragment {
         @Override
         protected void onPostExecute(List<Talk> talks) {
             adapter.setItems(talks);
+            talksListView.setAdapter(adapter);
         }
     }
 }
