@@ -176,5 +176,6 @@
         même si la fenêtre d\'avancement est masquée</string>
     <string name="dial_message_membre">Le chargement récupère les données et les images et peut être plus ou moins long. Une fois lancée la tâche s\'exécutera jusqu\'à la fin
         même si la fenêtre d\'avancement est masquée</string>
+    <string name="option_next_talk">Prochain talk</string>
 
 </resources>

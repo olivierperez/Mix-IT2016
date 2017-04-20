@@ -6,9 +6,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -19,6 +21,7 @@ import com.ehret.mixit.domain.TypeFile;
 import com.ehret.mixit.domain.talk.Talk;
 import com.ehret.mixit.model.ConferenceFacade;
 import com.ehret.mixit.utils.UIUtils;
+import com.ehret.mixit.view.LinearLayoutManagerWithSmoothScroller;
 
 import java.util.Date;
 import java.util.List;
@@ -29,6 +32,13 @@ public class FilDeLeauFragment extends Fragment {
     private RecyclerView talksListView;
     private FilAdapter adapter;
     private boolean alreadyLoaded = false;
+    private List<Talk> talks;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,7 +67,7 @@ public class FilDeLeauFragment extends Fragment {
                 });
 
         talksListView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        talksListView.setLayoutManager(new LinearLayoutManager(getContext()));
+        talksListView.setLayoutManager(new LinearLayoutManagerWithSmoothScroller(getContext()));
     }
 
     @Override
@@ -75,6 +85,22 @@ public class FilDeLeauFragment extends Fragment {
 
         if (talksListView.getAdapter() == null || talksListView.getAdapter().getItemCount() == 0) {
             new Loading(getContext()).execute();
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.add(0, R.string.option_next_talk, 65535, R.string.option_next_talk);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.string.option_next_talk) {
+            talksListView.smoothScrollToPosition(getCurrentTalk(talks));
+            return false;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 
@@ -122,6 +148,7 @@ public class FilDeLeauFragment extends Fragment {
             adapter.setItems(talks);
             talksListView.setAdapter(adapter);
             if (!alreadyLoaded) {
+                FilDeLeauFragment.this.talks = talks;
                 talksListView.scrollToPosition(getCurrentTalk(talks));
                 alreadyLoaded = true;
             }
