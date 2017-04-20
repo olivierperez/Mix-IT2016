@@ -20,14 +20,15 @@ import com.ehret.mixit.domain.talk.Talk;
 import com.ehret.mixit.model.ConferenceFacade;
 import com.ehret.mixit.utils.UIUtils;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 
 public class FilDeLeauFragment extends Fragment {
 
     private RecyclerView talksListView;
     private FilAdapter adapter;
+    private boolean alreadyLoaded = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,6 +79,29 @@ public class FilDeLeauFragment extends Fragment {
     }
 
     /**
+     * This method helps to scroll to the next incoming talk.
+     *
+     * @param talks List of all talks
+     * @return The index of the next incoming talk
+     */
+    public int getCurrentTalk(List<Talk> talks) {
+        Date date = new Date();
+        for (int i = 0; i < talks.size(); i++) {
+            Talk talk = talks.get(i);
+            if (talk.getEnd() != null && talk.getEnd().after(date)) {
+                if (i >= 2 && talks.get(i - 2).getFormat().startsWith("day")) {
+                    return i - 2;
+                } else if (i >= 1 && talks.get(i - 1).getTitle() == null) {
+                    return i - 1;
+                } else {
+                    return i;
+                }
+            }
+        }
+        return 0;
+    }
+
+    /**
      * Load talks asynchronously
      */
     private class Loading extends AsyncTask<Void, Void, List<Talk>> {
@@ -97,6 +121,10 @@ public class FilDeLeauFragment extends Fragment {
         protected void onPostExecute(List<Talk> talks) {
             adapter.setItems(talks);
             talksListView.setAdapter(adapter);
+            if (!alreadyLoaded) {
+                talksListView.scrollToPosition(getCurrentTalk(talks));
+                alreadyLoaded = true;
+            }
         }
     }
 }
