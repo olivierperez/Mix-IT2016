@@ -17,7 +17,6 @@
     <dimen name="text_size_medium">12sp</dimen>
     <dimen name="text_size_large">16sp</dimen>
     <dimen name="session_image_size">42dp</dimen>
-    <dimen name="session_talk_height">70dp</dimen>
     <dimen name="session_lang_image_size">24sp</dimen>
     <dimen name="track_image_size">27dp</dimen>
     <dimen name="speaker_image_size">48dp</dimen>

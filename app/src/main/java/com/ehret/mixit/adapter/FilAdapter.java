@@ -71,7 +71,6 @@ public class FilAdapter extends RecyclerView.Adapter<FilAdapter.FilViewHolder> {
         private ImageView imageFavorite;
         private ImageView imageTrack;
         private ImageView langImage;
-        private View leftContainer;
         private View timeContainer;
 
         public FilViewHolder(View itemView) {
@@ -85,7 +84,6 @@ public class FilAdapter extends RecyclerView.Adapter<FilAdapter.FilViewHolder> {
             horaire = (TextView) itemView.findViewById(R.id.talk_horaire);
             talkImageText = (TextView) itemView.findViewById(R.id.talkImageText);
             talkSalle = (TextView) itemView.findViewById(R.id.talk_salle);
-            leftContainer = itemView.findViewById(R.id.left_container);
             timeContainer = itemView.findViewById(R.id.time_container);
         }
 
@@ -96,7 +94,9 @@ public class FilAdapter extends RecyclerView.Adapter<FilAdapter.FilViewHolder> {
 
             if (talk.getTitle() == null) {
                 // In this case this just a time marker
-                leftContainer.setVisibility(View.GONE);
+                imageFavorite.setVisibility(View.GONE);
+                imageTrack.setVisibility(View.GONE);
+                talkImageText.setVisibility(View.GONE);
                 timeContainer.setVisibility(View.GONE);
                 descriptif.setVisibility(View.GONE);
 
@@ -114,7 +114,9 @@ public class FilAdapter extends RecyclerView.Adapter<FilAdapter.FilViewHolder> {
                     name.setTextColor(context.getResources().getColor(R.color.black));
                 }
             } else {
-                leftContainer.setVisibility(View.VISIBLE);
+                imageFavorite.setVisibility(View.VISIBLE);
+                imageTrack.setVisibility(View.VISIBLE);
+                talkImageText.setVisibility(View.VISIBLE);
                 timeContainer.setVisibility(View.VISIBLE);
 
                 // We control hour
