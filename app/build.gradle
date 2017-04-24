@@ -14,8 +14,8 @@ android {
         applicationId "com.ehret.mixit"
         minSdkVersion 19
         targetSdkVersion 22
-        versionCode 20
-        versionName "5.0"
+        versionCode 23
+        versionName "5.3"
 //        jackOptions {
 //            enabled true
 //        }
